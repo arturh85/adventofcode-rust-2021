@@ -118,7 +118,7 @@
 
 #[aoc_generator(day1)]
 fn parse_input(input: &str) -> Vec<i64> {
-    input.lines().map(line.parse().unwrap()).collect()
+    input.lines().map(|line|line.parse().unwrap()).collect()
 }
 
 /// How many measurements are larger than the previous measurement?
