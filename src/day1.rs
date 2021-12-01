@@ -116,18 +116,21 @@
 //! Consider sums of a three-measurement sliding window.
 //! **How many sums are larger than the previous sum?**
 
+#[aoc_generator(day1)]
+fn parse_input(input: &str) -> Vec<i64> {
+    input.lines().map(line.parse().unwrap()).collect()
+}
+
 /// How many measurements are larger than the previous measurement?
 #[aoc(day1, part1)]
-fn part1(input: &str) -> usize {
-    let numbers: Vec<i64> = input.lines().map(|line| line.parse().unwrap()).collect();
-    count_increases(&numbers)
+fn part1(input: &[i64]) -> usize {
+    count_increases(&input)
 }
 
 /// How many sums are larger than the previous sum?
 #[aoc(day1, part2)]
-fn part2(input: &str) -> usize {
-    let numbers: Vec<i64> = input.lines().map(|line| line.parse().unwrap()).collect();
-    let threesome_sum: Vec<i64> = numbers.windows(3).map(|n| n.iter().sum()).collect();
+fn part2(input: &[i64]) -> usize {
+    let threesome_sum: Vec<i64> = input.windows(3).map(|n| n.iter().sum()).collect();
     count_increases(&threesome_sum)
 }
 
@@ -153,11 +156,13 @@ mod tests {
 
     #[test]
     fn part1_examples() {
-        assert_eq!(7, part1(EXAMPLE));
+        let input = parse_input(EXAMPLE);
+        assert_eq!(7, part1(&input));
     }
 
     #[test]
     fn part2_examples() {
-        assert_eq!(5, part2(EXAMPLE));
+        let input = parse_input(EXAMPLE);
+        assert_eq!(5, part2(&input));
     }
 }
