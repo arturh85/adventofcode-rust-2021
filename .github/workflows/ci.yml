@@ -1,0 +1,48 @@
+name: "ci"
+on:
+  push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔥 checkout code
+        uses: actions/checkout@v2
+      - name: ⚡ install Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      - name: 🗃️ cache Rust
+        uses: Swatinem/rust-cache@v1
+      - name: ⚡ install cargo flamegraph
+        run: cargo install flamegraph
+      - name: ⚡ install cargo aoc
+        run: cargo install --git https://github.com/arturh85/cargo-aoc --branch v0.3
+      - name: ✅ run rust tests
+        run: cargo test
+      - name: ✅ run rust doc
+        run: cargo doc --no-deps --document-private-items
+      - name: ✅ run rust lint
+        continue-on-error: true
+        run: cargo clippy
+      - name: 🚚 move docs to public
+        run: cp -r target/doc/ public/;
+      - name: 🚀 execute all problems & record execution times in times.md
+        run: bash .github/run.sh
+      - name: 🚚 move times.md to markdown input_dir & move generated flamegraphs to public folder
+        run: mkdir markdown; mv times.md markdown/times.md; cp flamegraph*.svg markdown/; mkdir public/times/; mv flamegraph*.svg public/times/; cp markdown/times.md public/times/
+      - name: ⚡ build markdown html
+        uses: baileyjm02/markdown-to-pdf@v1
+        with:
+          input_dir: markdown
+          output_dir: public/times/
+          images_dir: markdown
+          build_html: true
+      - name: 📦 deploy public to gh-pages
+        uses: peaceiris/actions-gh-pages@364c31d33bb99327c77b3a5438a83a357a6729ad # v3.4.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./public
+          force_orphan: true

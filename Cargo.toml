@@ -1,0 +1,21 @@
+[package]
+name = "adventofcode-rust-2021"
+version = "0.0.0"
+edition = "2021"
+
+[profile.bench]
+debug = true
+
+[dependencies]
+aoc-runner = "0.3.0"
+aoc-runner-derive = "0.3.0"
+
+anyhow = "*"
+serde_json = "*" # day 12
+itertools = "*" # day 03
+rust-crypto = "*" # day 04
+unicode-segmentation = "*" # day 05
+nom = "^7.0.0" # day 07, 08
+#chumsky = "0.4.1"
+#ariadne = "0.1.3"
+#rayon = "1.5.1"
