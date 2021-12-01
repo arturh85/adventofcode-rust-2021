@@ -120,24 +120,27 @@
 #[aoc(day1, part1)]
 fn part1(input: &str) -> usize {
     let numbers: Vec<i64> = input.lines().map(|line| line.parse().unwrap()).collect();
-    numbers.windows(2).map(|w| if w[1] > w[0] { 1 } else { 0 }).sum()
+    count_increases(&numbers)
 }
 
 /// How many sums are larger than the previous sum?
 #[aoc(day1, part2)]
 fn part2(input: &str) -> usize {
     let numbers: Vec<i64> = input.lines().map(|line| line.parse().unwrap()).collect();
-    let averaged: Vec<i64> = numbers.windows(3).map(|n| n.iter().sum()).collect();
-    averaged.windows(2).map(|w| if w[1] > w[0] { 1 } else { 0 }).sum()
+    let threesome_sum: Vec<i64> = numbers.windows(3).map(|n| n.iter().sum()).collect();
+    count_increases(&threesome_sum)
+}
+
+/// Counts how many values in collection increase compared to previous
+fn count_increases(collection: &[i64]) -> usize {
+    collection.windows(2).map(|window| if window[1] > window[0] { 1 } else { 0 }).sum()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    #[test]
-    fn part1_examples() {
-        assert_eq!(7, part1("199
+    const EXAMPLE: &str = "199
 200
 208
 210
@@ -146,19 +149,15 @@ mod tests {
 240
 269
 260
-263"));
+263";
+
+    #[test]
+    fn part1_examples() {
+        assert_eq!(7, part1(EXAMPLE));
     }
 
     #[test]
     fn part2_examples() {
-        assert_eq!(5, part2("199
-200
-208
-210
-200
-207
-240
-269
-260
-263"));}
+        assert_eq!(5, part2(EXAMPLE));
+    }
 }
