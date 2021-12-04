@@ -113,7 +113,7 @@ impl BingoBoard {
                 break
             }
             for (x, value) in line.split(" ").enumerate() {
-                values[x][y] = value.parse().unwrap();
+                values[y][x]  = value.parse().unwrap();
             }
         }
         BingoBoard {
@@ -125,9 +125,9 @@ impl BingoBoard {
     fn play(&mut self, n: u8) -> Option<u64> {
         for x in 0..BOARD_SIZE {
             for y in 0..BOARD_SIZE {
-                if self.values[x][y] == n {
-                    self.marked[x][y] = true;
-                    if self.check_win() {
+                if self.values[y][x]  == n {
+                    self.marked[y][x]  = true;
+                    if self.has_win() {
                         return Some(self.score());
                     }
                 }
@@ -140,15 +140,15 @@ impl BingoBoard {
         let mut score = 0;
         for x in 0..BOARD_SIZE {
             for y in 0..BOARD_SIZE {
-                if !self.marked[x][y] {
-                    score += self.values[x][y] as u64
+                if !self.marked[y][x]  {
+                    score += self.values[y][x]  as u64
                 }
             }
         }
         score
     }
 
-    fn check_win(&self) -> bool {
+    fn has_win(&self) -> bool {
         for a in 0..BOARD_SIZE {
             let mut count_a = 0;
             let mut count_b = 0;
@@ -214,13 +214,15 @@ fn parse_input(input: &str) -> BingoGame {
     let mut boards = Vec::new();
     let mut numbers = Vec::new();
     let mut buffer = String::new();
+    const HEADER_LINES: usize = 2;
+    const FOOTER_LINES: usize = 1;
     for (nr, line) in input.lines().enumerate() {
         if nr == 0 {
             numbers = line.split(",").map(|c| c.parse().unwrap()).collect();
-        } else if nr > 1 {
+        } else if nr >= HEADER_LINES {
             buffer += &*line.replace("  ", " ").trim();
             buffer += "\n";
-            if (nr - 2) % 6 == 5 {
+            if (nr - HEADER_LINES) % (BOARD_SIZE + FOOTER_LINES) == BOARD_SIZE {
                 boards.push(BingoBoard::new(&buffer));
                 buffer = String::new();
             }
