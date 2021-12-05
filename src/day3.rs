@@ -129,6 +129,18 @@ fn parse_input(input: &str) -> Vec<u32> {
     input.lines().map(|line|u32::from_str_radix(line, 2).unwrap()).collect()
 }
 
+/// What is the power consumption of the submarine?
+#[aoc(day3, part1)]
+fn part1(input: &Vec<u32>) -> u64 {
+    gamma(input) as u64 * epsilon(input) as u64
+}
+
+/// What is the life support rating of the submarine?
+#[aoc(day3, part2)]
+fn part2(input: &Vec<u32>) -> u64 {
+    oxygen(input) as u64 * co2(input) as u64
+}
+
 ///  To find oxygen generator rating, determine the most common value (`0` or `1`) in the
 ///  current bit position, and keep only numbers with that bit in that position. If `0` and `1`
 ///  are equally common, keep values with a `1` in the position being considered.
@@ -221,18 +233,6 @@ fn epsilon(input: &Vec<u32>) ->  u32 {
         }
     }
     ret
-}
-
-/// What is the power consumption of the submarine?
-#[aoc(day3, part1)]
-fn part1(input: &Vec<u32>) -> u64 {
-    gamma(input) as u64 * epsilon(input) as u64
-}
-
-/// What is the life support rating of the submarine?
-#[aoc(day3, part2)]
-fn part2(input: &Vec<u32>) -> u64 {
-    oxygen(input) as u64 * co2(input) as u64
 }
 
 #[cfg(test)]
