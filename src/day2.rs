@@ -90,6 +90,20 @@ fn parse_input(input: &str) -> Vec<Instr> {
     }).collect()
 }
 
+/// What do you get if you multiply your final horizontal position by your final depth?
+#[aoc(day2, part1)]
+fn part1(input: &Vec<Instr>) -> i64 {
+    let pos = execute1(input);
+    pos.0 * pos.1
+}
+
+/// What do you get if you multiply your final horizontal position by your final depth?
+#[aoc(day2, part2)]
+fn part2(input: &Vec<Instr>) -> i64 {
+    let pos = execute2(input);
+    pos.0 * pos.1
+}
+
 fn execute1(instructions: &Vec<Instr>) -> (i64, i64) {
     let mut pos = (0,0);
     for instr in instructions {
@@ -118,24 +132,10 @@ fn execute2(instructions: &Vec<Instr>) -> (i64, i64) {
     pos
 }
 
-/// What do you get if you multiply your final horizontal position by your final depth?
-#[aoc(day2, part1)]
-fn part1(input: &Vec<Instr>) -> i64 {
-    let pos = execute1(input);
-    pos.0 * pos.1
-}
-
 enum Instr {
     Forward(i64),
     Down(i64),
     Up(i64),
-}
-
-/// What do you get if you multiply your final horizontal position by your final depth?
-#[aoc(day2, part2)]
-fn part2(input: &Vec<Instr>) -> i64 {
-    let pos = execute2(input);
-    pos.0 * pos.1
 }
 
 #[cfg(test)]
