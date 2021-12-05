@@ -96,6 +96,45 @@
 //!
 //! **Figure out which board will win last. Once it wins, what would its final score be?**
 
+#[aoc_generator(day4)]
+fn parse_input(input: &str) -> BingoGame {
+    let mut boards = Vec::new();
+    let mut numbers = Vec::new();
+    let mut buffer = String::new();
+    const HEADER_LINES: usize = 2;
+    const FOOTER_LINES: usize = 1;
+    for (nr, line) in input.lines().enumerate() {
+        if nr == 0 {
+            numbers = line.split(",").map(|c| c.parse().unwrap()).collect();
+        } else if nr >= HEADER_LINES {
+            buffer += &*line.replace("  ", " ").trim();
+            buffer += "\n";
+            if (nr - HEADER_LINES) % (BOARD_SIZE + FOOTER_LINES) == BOARD_SIZE {
+                boards.push(BingoBoard::new(&buffer));
+                buffer = String::new();
+            }
+        }
+    }
+    boards.push(BingoBoard::new(&buffer));
+
+    BingoGame {
+        boards,
+        numbers
+    }
+}
+
+/// Figure out which board will win first. What will your final score be if you choose that board?
+#[aoc(day4, part1)]
+fn part1(game: &BingoGame) -> u64 {
+    game.play_win_first().expect("no winner")
+}
+
+/// Figure out which board will win last. Once it wins, what would its final score be?
+#[aoc(day4, part2)]
+fn part2(game: &BingoGame) -> u64 {
+    game.play_win_last().expect("no winner")
+}
+
 const BOARD_SIZE: usize = 5;
 
 #[derive(Clone)]
@@ -207,45 +246,6 @@ impl BingoGame {
         }
         None
     }
-}
-
-#[aoc_generator(day4)]
-fn parse_input(input: &str) -> BingoGame {
-    let mut boards = Vec::new();
-    let mut numbers = Vec::new();
-    let mut buffer = String::new();
-    const HEADER_LINES: usize = 2;
-    const FOOTER_LINES: usize = 1;
-    for (nr, line) in input.lines().enumerate() {
-        if nr == 0 {
-            numbers = line.split(",").map(|c| c.parse().unwrap()).collect();
-        } else if nr >= HEADER_LINES {
-            buffer += &*line.replace("  ", " ").trim();
-            buffer += "\n";
-            if (nr - HEADER_LINES) % (BOARD_SIZE + FOOTER_LINES) == BOARD_SIZE {
-                boards.push(BingoBoard::new(&buffer));
-                buffer = String::new();
-            }
-        }
-    }
-    boards.push(BingoBoard::new(&buffer));
-
-    BingoGame {
-        boards,
-        numbers
-    }
-}
-
-/// Figure out which board will win first. What will your final score be if you choose that board?
-#[aoc(day4, part1)]
-fn part1(game: &BingoGame) -> u64 {
-    game.play_win_first().expect("no winner")
-}
-
-/// Figure out which board will win last. Once it wins, what would its final score be?
-#[aoc(day4, part2)]
-fn part2(game: &BingoGame) -> u64 {
-    game.play_win_last().expect("no winner")
 }
 
 #[cfg(test)]
