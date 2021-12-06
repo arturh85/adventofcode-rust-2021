@@ -1,4 +1,4 @@
-//! [Day 6: Lanternfish](https://adventofcode.com/2021/day/6)
+//! # [Day 6: Lanternfish](https://adventofcode.com/2021/day/6)
 //!
 //! The sea floor is getting steeper. Maybe the sleigh keys got carried this way?
 //!
@@ -73,7 +73,8 @@
 //! In this example, after 18 days, there are a total of `26` fish.
 //! After 80 days, there would be a total of `5934`.
 //!
-//! Find a way to simulate lanternfish. **How many lanternfish would there be after 80 days?**
+//! Find a way to simulate lanternfish.
+//! **How many lanternfish would there be after 80 days?**
 //!
 //! # Part Two
 //!
@@ -81,8 +82,7 @@
 //! Would they take over the entire ocean?
 //!
 //! After 256 days in the example above, there would be a total of `26984457539` lanternfish!
-//!
-//! How many lanternfish would there be after 256 days?
+//! **How many lanternfish would there be after 256 days?**
 
 #[aoc_generator(day6)]
 fn parse_input(input: &str) -> Vec<u8> {
