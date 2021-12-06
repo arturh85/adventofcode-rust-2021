@@ -84,7 +84,6 @@
 //! 269    F G H
 //! 260      G H
 //! 263        H
-//!
 //! ```
 //!
 //! Start by comparing the first and second three-measurement windows.
@@ -118,7 +117,7 @@
 
 #[aoc_generator(day1)]
 fn parse_input(input: &str) -> Vec<i64> {
-    input.lines().map(|line|line.parse().unwrap()).collect()
+    input.lines().map(|line| line.parse().unwrap()).collect()
 }
 
 /// How many measurements are larger than the previous measurement?
@@ -136,7 +135,10 @@ fn part2(input: &[i64]) -> usize {
 
 /// Counts how many values in collection increase compared to previous
 fn count_increases(collection: &[i64]) -> usize {
-    collection.windows(2).map(|window| if window[1] > window[0] { 1 } else { 0 }).sum()
+    collection
+        .windows(2)
+        .map(|window| if window[1] > window[0] { 1 } else { 0 })
+        .sum()
 }
 
 #[cfg(test)]
