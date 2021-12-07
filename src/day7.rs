@@ -84,6 +84,8 @@ fn parse_input(input: &str) -> Vec<u32> {
     input.split(",").map(|line| line.parse().unwrap()).collect()
 }
 
+/// Part 1:
+/// Determine the horizontal position that the crabs can align to using the least fuel possible.
 /// How much fuel must they spend to align to that position?
 #[aoc(day7, part1)]
 fn part1(input: &Vec<u32>) -> u32 {
@@ -93,6 +95,9 @@ fn part1(input: &Vec<u32>) -> u32 {
         .unwrap()
 }
 
+/// Part 2:
+/// Determine the horizontal position that the crabs can align to using the least fuel possible so
+/// they can make you an escape route!
 /// How much fuel must they spend to align to that position?
 #[aoc(day7, part2)]
 fn part2(input: &Vec<u32>) -> u32 {
@@ -141,11 +146,13 @@ mod tests {
 
     #[test]
     fn part1_examples() {
+        // This costs a total of `37` fuel. This is the cheapest possible outcome
         assert_eq!(37, part1(&parse_input(EXAMPLE)));
     }
 
     #[test]
     fn part2_examples() {
+        //  This costs a total of `168` fuel. This is the new cheapest possible outcome
         assert_eq!(168, part2(&parse_input(EXAMPLE)));
     }
 }

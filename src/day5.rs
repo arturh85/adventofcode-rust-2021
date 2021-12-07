@@ -93,26 +93,27 @@ use grid::Grid;
 
 #[aoc_generator(day5)]
 fn parse_input(input: &str) -> Vec<Line> {
-    input.lines().map(|line|{
-        Line::parse(line)
-    }).collect()
+    input.lines().map(|line| Line::parse(line)).collect()
 }
 
-/// At how many points do at least two lines overlap?
+/// Part 1: At how many points do at least two lines overlap?
 #[aoc(day5, part1)]
 fn part1(input: &Vec<Line>) -> usize {
-    let non_diagonals: Vec<Line> = input.clone().into_iter().filter(|line| !line.is_diagonal()).collect();
+    let non_diagonals: Vec<Line> = input
+        .clone()
+        .into_iter()
+        .filter(|line| !line.is_diagonal())
+        .collect();
     let grid = build_grid(&non_diagonals);
     grid.iter().filter(|v| **v >= 2).count()
 }
 
-/// At how many points do at least two lines overlap?
+/// Part 2: At how many points do at least two lines overlap?
 #[aoc(day5, part2)]
 fn part2(input: &Vec<Line>) -> usize {
     let grid = build_grid(input);
     grid.iter().filter(|v| **v >= 2).count()
 }
-
 
 #[derive(Debug, Clone)]
 struct Point {
@@ -153,17 +154,11 @@ impl Line {
         let mut arr = Vec::new();
         if self.begin.x == self.end.x {
             for y in range(self.begin.y, self.end.y) {
-                arr.push(Point {
-                    x: self.begin.x,
-                    y
-                })
+                arr.push(Point { x: self.begin.x, y })
             }
         } else if self.begin.y == self.end.y {
             for x in range(self.begin.x, self.end.x) {
-                arr.push(Point {
-                    x,
-                    y: self.begin.y
-                })
+                arr.push(Point { x, y: self.begin.y })
             }
         } else {
             let x_range = range(self.begin.x, self.end.x);
@@ -243,12 +238,16 @@ mod tests {
 
     #[test]
     fn part1_examples() {
+        // In the above example, this is anywhere in the diagram with a `2` or
+        // larger - a total of `5` points.
         let lines = parse_input(EXAMPLE);
         assert_eq!(5, part1(&lines));
     }
 
     #[test]
     fn part2_examples() {
+        // In the above example, this is still anywhere in the diagram with a `2` or larger - now a
+        // total of `12` points.
         let lines = parse_input(EXAMPLE);
         assert_eq!(12, part2(&lines));
     }

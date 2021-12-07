@@ -89,13 +89,13 @@ fn parse_input(input: &str) -> Vec<u8> {
     input.split(",").map(|line| line.parse().unwrap()).collect()
 }
 
-/// How many lanternfish would there be after 80 days?
+/// Part 1: How many lanternfish would there be after 80 days?
 #[aoc(day6, part1)]
 fn part1(input: &Vec<u8>) -> u64 {
     evolve(input, 80)
 }
 
-/// How many lanternfish would there be after 256 days?
+/// Part 2: How many lanternfish would there be after 256 days?
 #[aoc(day6, part2)]
 fn part2(input: &Vec<u8>) -> u64 {
     evolve(input, 256)
@@ -135,6 +135,7 @@ mod tests {
 
     #[test]
     fn part2_examples() {
+        // After 256 days in the example above, there would be a total of `26984457539` lanternfish!
         let state = parse_input(EXAMPLE);
         assert_eq!(26984457539, evolve(&state, 256));
     }

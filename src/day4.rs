@@ -117,19 +117,16 @@ fn parse_input(input: &str) -> BingoGame {
     }
     boards.push(BingoBoard::new(&buffer));
 
-    BingoGame {
-        boards,
-        numbers
-    }
+    BingoGame { boards, numbers }
 }
 
-/// Figure out which board will win first. What will your final score be if you choose that board?
+/// Part 1: Figure out which board will win first. What will your final score be if you choose that board?
 #[aoc(day4, part1)]
 fn part1(game: &BingoGame) -> u64 {
     game.play_win_first().expect("no winner")
 }
 
-/// Figure out which board will win last. Once it wins, what would its final score be?
+/// Part 2: Figure out which board will win last. Once it wins, what would its final score be?
 #[aoc(day4, part2)]
 fn part2(game: &BingoGame) -> u64 {
     game.play_win_last().expect("no winner")
@@ -149,23 +146,20 @@ impl BingoBoard {
         let marked = [[false; BOARD_SIZE]; BOARD_SIZE];
         for (y, line) in board.lines().enumerate() {
             if line.is_empty() {
-                break
+                break;
             }
             for (x, value) in line.split(" ").enumerate() {
-                values[y][x]  = value.parse().unwrap();
+                values[y][x] = value.parse().unwrap();
             }
         }
-        BingoBoard {
-            values,
-            marked,
-        }
+        BingoBoard { values, marked }
     }
 
     fn play(&mut self, n: u8) -> Option<u64> {
         for x in 0..BOARD_SIZE {
             for y in 0..BOARD_SIZE {
-                if self.values[y][x]  == n {
-                    self.marked[y][x]  = true;
+                if self.values[y][x] == n {
+                    self.marked[y][x] = true;
                     if self.has_win() {
                         return Some(self.score());
                     }
@@ -179,8 +173,8 @@ impl BingoBoard {
         let mut score = 0;
         for x in 0..BOARD_SIZE {
             for y in 0..BOARD_SIZE {
-                if !self.marked[y][x]  {
-                    score += self.values[y][x]  as u64
+                if !self.marked[y][x] {
+                    score += self.values[y][x] as u64
                 }
             }
         }
@@ -200,7 +194,7 @@ impl BingoBoard {
                 }
             }
             if count_a == BOARD_SIZE || count_b == BOARD_SIZE {
-                return true
+                return true;
             }
         }
         false
@@ -274,12 +268,19 @@ mod tests {
 
     #[test]
     fn part1_examples() {
+        // The score of the winning board can now be calculated. Start by finding the sum of all unmarked
+        // numbers on that board; in this case, the sum is `188`. Then, multiply that sum by the number
+        // that was just called when the board won, `24`, to get the final score, `188 * 24 = 4512`.
         let result = parse_input(EXAMPLE).play_win_first().expect("no winner");
         assert_eq!(4512, result);
     }
 
     #[test]
     fn part2_examples() {
+        // In the above example, the second board is the last to win, which happens after `13` is
+        // eventually called and its middle column is completely marked. If you were to keep playing
+        // until this point, the second board would have a sum of unmarked numbers equal to `148` for
+        // a final score of `148 * 13 = 1924`.
         let result = parse_input(EXAMPLE).play_win_last().expect("no winner");
         assert_eq!(1924, result);
     }

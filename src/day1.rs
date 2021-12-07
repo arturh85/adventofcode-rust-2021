@@ -120,13 +120,13 @@ fn parse_input(input: &str) -> Vec<i64> {
     input.lines().map(|line| line.parse().unwrap()).collect()
 }
 
-/// How many measurements are larger than the previous measurement?
+/// Part 1: How many measurements are larger than the previous measurement?
 #[aoc(day1, part1)]
 fn part1(input: &[i64]) -> usize {
     count_increases(&input)
 }
 
-/// How many sums are larger than the previous sum?
+/// Part 2: How many sums are larger than the previous sum?
 #[aoc(day1, part2)]
 fn part2(input: &[i64]) -> usize {
     let threesome_sum: Vec<i64> = input.windows(3).map(|n| n.iter().sum()).collect();
@@ -158,13 +158,13 @@ mod tests {
 
     #[test]
     fn part1_examples() {
-        let input = parse_input(EXAMPLE);
-        assert_eq!(7, part1(&input));
+        // In this example, there are `7` measurements that are larger than the previous measurement.
+        assert_eq!(7, part1(&parse_input(EXAMPLE)));
     }
 
     #[test]
     fn part2_examples() {
-        let input = parse_input(EXAMPLE);
-        assert_eq!(5, part2(&input));
+        // In this example, there are `5` sums that are larger than the previous sum.
+        assert_eq!(5, part2(&parse_input(EXAMPLE)));
     }
 }

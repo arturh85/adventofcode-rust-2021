@@ -41,7 +41,7 @@
 //!
 //! # Part Two
 //!
-//! Based on your calculations, the planned course doesn't seem to make any sense. 
+//! Based on your calculations, the planned course doesn't seem to make any sense.
 //! You find the submarine manual and discover that the process is actually slightly more complicated.
 //!
 //! In addition to horizontal position and depth, you'll also need to track a third value, aim,
@@ -79,17 +79,24 @@
 
 #[aoc_generator(day2)]
 fn parse_input(input: &str) -> Vec<Instr> {
-    input.lines().map(|line| {
-        let parts: Vec<&str> = line.split(" ").collect();
-        match parts[0] {
-            "forward" => Instr::Forward(parts[1].parse().unwrap()),
-            "up" => Instr::Up(parts[1].parse().unwrap()),
-            "down" => Instr::Down(parts[1].parse().unwrap()),
-            _ => {panic!("wtf")}
-        }
-    }).collect()
+    input
+        .lines()
+        .map(|line| {
+            let parts: Vec<&str> = line.split(" ").collect();
+            match parts[0] {
+                "forward" => Instr::Forward(parts[1].parse().unwrap()),
+                "up" => Instr::Up(parts[1].parse().unwrap()),
+                "down" => Instr::Down(parts[1].parse().unwrap()),
+                _ => {
+                    panic!("wtf")
+                }
+            }
+        })
+        .collect()
 }
 
+/// Part 1:
+/// Calculate the horizontal position and depth you would have after following the planned course.
 /// What do you get if you multiply your final horizontal position by your final depth?
 #[aoc(day2, part1)]
 fn part1(input: &Vec<Instr>) -> i64 {
@@ -97,6 +104,9 @@ fn part1(input: &Vec<Instr>) -> i64 {
     pos.0 * pos.1
 }
 
+/// Part 2:
+/// Using this new interpretation of the commands, calculate the horizontal position and depth
+/// you would have after following the planned course.
 /// What do you get if you multiply your final horizontal position by your final depth?
 #[aoc(day2, part2)]
 fn part2(input: &Vec<Instr>) -> i64 {
@@ -105,7 +115,7 @@ fn part2(input: &Vec<Instr>) -> i64 {
 }
 
 fn execute1(instructions: &Vec<Instr>) -> (i64, i64) {
-    let mut pos = (0,0);
+    let mut pos = (0, 0);
     for instr in instructions {
         match instr {
             Instr::Forward(amount) => pos.0 += amount,
@@ -117,16 +127,16 @@ fn execute1(instructions: &Vec<Instr>) -> (i64, i64) {
 }
 
 fn execute2(instructions: &Vec<Instr>) -> (i64, i64) {
-    let mut pos = (0,0);
+    let mut pos = (0, 0);
     let mut aim = 0;
     for instr in instructions {
         match instr {
             Instr::Forward(amount) => {
                 pos.0 += amount;
                 pos.1 += aim * amount;
-            },
+            }
             Instr::Up(amount) => aim -= amount,
-            Instr::Down(amount) => aim += amount
+            Instr::Down(amount) => aim += amount,
         }
     }
     pos
@@ -151,12 +161,16 @@ forward 2";
 
     #[test]
     fn part1_examples() {
+        // After following these instructions, you would have a horizontal position
+        // of `15` and a depth of `10`. (Multiplying these together produces `150`.)
         let pos = execute1(&parse_input(EXAMPLE));
         assert_eq!((15, 10), pos);
     }
 
     #[test]
     fn part2_examples() {
+        // After following these new instructions, you would have a horizontal position of `15` and
+        // a depth of `60`. (Multiplying these produces `900`.)
         let pos = execute2(&parse_input(EXAMPLE));
         assert_eq!((15, 60), pos);
     }

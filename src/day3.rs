@@ -1,20 +1,20 @@
 //! # [Day 3: Binary Diagnostic](https://adventofcode.com/2021/day/3)
-//! 
+//!
 //! The submarine has been making some odd creaking noises, so you ask it to produce a
 //! diagnostic report just in case.
-//! 
+//!
 //! The diagnostic report (your puzzle input) consists of a list of binary numbers which,
 //! when decoded properly, can tell you many useful things about the conditions of the submarine.
 //! The first parameter to check is the power consumption.
-//! 
+//!
 //! You need to use the binary numbers in the diagnostic report to generate two new binary numbers
 //! (called the gamma rate and the epsilon rate).
 //! The power consumption can then be found by multiplying the gamma rate by the epsilon rate.
-//! 
+//!
 //! Each bit in the gamma rate can be determined by finding the most common bit in the
 //! corresponding position of all numbers in the diagnostic report. For example,
 //! given the following diagnostic report:
-//! 
+//!
 //! ```plain
 //! 00100
 //! 11110
@@ -29,23 +29,23 @@
 //! 00010
 //! 01010
 //! ```
-//! 
+//!
 //! Considering only the first bit of each number, there are five `0` bits and seven `1` bits.
 //! Since the most common bit is `1`, the first bit of the gamma rate is `1`.
-//! 
+//!
 //! The most common second bit of the numbers in the diagnostic report is `0`,
 //! so the second bit of the gamma rate is `0`.
-//! 
+//!
 //! The most common value of the third, fourth, and fifth bits are `1`, `1`, and `0`,
 //! respectively, and so the final three bits of the gamma rate are `110`.
-//! 
+//!
 //! So, the gamma rate is the binary number `10110`, or `22` in decimal.
-//! 
+//!
 //! The epsilon rate is calculated in a similar way; rather than use the most common bit,
 //! the least common bit from each position is used. So, the epsilon rate is `01001`,
 //! or `9` in decimal. Multiplying the gamma rate (`22`) by the epsilon rate (`9`)
 //! produces the power consumption, `198`.
-//! 
+//!
 //! Use the binary numbers in your diagnostic report to calculate the gamma rate and epsilon rate,
 //! then multiply them together.
 //!
@@ -126,16 +126,25 @@ use bitlab::*;
 
 #[aoc_generator(day3)]
 fn parse_input(input: &str) -> Vec<u32> {
-    input.lines().map(|line|u32::from_str_radix(line, 2).unwrap()).collect()
+    input
+        .lines()
+        .map(|line| u32::from_str_radix(line, 2).unwrap())
+        .collect()
 }
 
+/// Part 1:
+/// Use the binary numbers in your diagnostic report to calculate the gamma rate and epsilon rate,
+/// then multiply them together.
 /// What is the power consumption of the submarine?
 #[aoc(day3, part1)]
 fn part1(input: &Vec<u32>) -> u64 {
     gamma(input) as u64 * epsilon(input) as u64
 }
 
+/// Part 2:
 /// What is the life support rating of the submarine?
+/// Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and
+/// CO2 scrubber rating, then multiply them together.
 #[aoc(day3, part2)]
 fn part2(input: &Vec<u32>) -> u64 {
     oxygen(input) as u64 * co2(input) as u64
@@ -144,7 +153,7 @@ fn part2(input: &Vec<u32>) -> u64 {
 ///  To find oxygen generator rating, determine the most common value (`0` or `1`) in the
 ///  current bit position, and keep only numbers with that bit in that position. If `0` and `1`
 ///  are equally common, keep values with a `1` in the position being considered.
-fn oxygen(input: &Vec<u32>) ->  u32 {
+fn oxygen(input: &Vec<u32>) -> u32 {
     let max = *input.iter().max().unwrap();
     let start = significant_bitcount(max).unwrap();
 
@@ -152,9 +161,15 @@ fn oxygen(input: &Vec<u32>) ->  u32 {
     for i in start..32 {
         let (count_zeros, count_ones) = count_ones_zeros_at(&remaining, i);
         if count_ones >= count_zeros {
-            remaining = remaining.into_iter().filter(|v| v.get_bit(i).unwrap()).collect();
+            remaining = remaining
+                .into_iter()
+                .filter(|v| v.get_bit(i).unwrap())
+                .collect();
         } else {
-            remaining = remaining.into_iter().filter(|v| !v.get_bit(i).unwrap()).collect();
+            remaining = remaining
+                .into_iter()
+                .filter(|v| !v.get_bit(i).unwrap())
+                .collect();
         }
         if remaining.len() == 1 {
             return remaining[0];
@@ -166,7 +181,7 @@ fn oxygen(input: &Vec<u32>) ->  u32 {
 /// To find CO2 scrubber rating, determine the least common value (`0` or `1`) in the current
 /// bit position, and keep only numbers with that bit in that position. If `0` and `1` are equally
 /// common, keep values with a `0` in the position being considered.
-fn co2(input: &Vec<u32>) ->  u32 {
+fn co2(input: &Vec<u32>) -> u32 {
     let max = *input.iter().max().unwrap();
     let start = significant_bitcount(max).unwrap();
 
@@ -174,9 +189,15 @@ fn co2(input: &Vec<u32>) ->  u32 {
     for i in start..32 {
         let (count_zeros, count_ones) = count_ones_zeros_at(&remaining, i);
         if count_zeros <= count_ones {
-            remaining = remaining.into_iter().filter(|v| !v.get_bit(i).unwrap()).collect();
+            remaining = remaining
+                .into_iter()
+                .filter(|v| !v.get_bit(i).unwrap())
+                .collect();
         } else {
-            remaining = remaining.into_iter().filter(|v| v.get_bit(i).unwrap()).collect();
+            remaining = remaining
+                .into_iter()
+                .filter(|v| v.get_bit(i).unwrap())
+                .collect();
         }
         if remaining.len() == 1 {
             return remaining[0];
@@ -199,7 +220,7 @@ fn count_ones_zeros_at(input: &Vec<u32>, pos: u32) -> (u32, u32) {
 }
 
 /// The gamma rate is calculated by using the least common bit from each position.
-fn gamma(input: &Vec<u32>) ->  u32 {
+fn gamma(input: &Vec<u32>) -> u32 {
     let mut ret = 0;
     for i in 0..32 {
         let (count_zeros, count_ones) = count_ones_zeros_at(input, i);
@@ -221,7 +242,7 @@ fn significant_bitcount(value: u32) -> Option<u32> {
 
 /// The epsilon rate is calculated in a similar way; rather than use the most common bit,
 /// the least common bit from each position is used.
-fn epsilon(input: &Vec<u32>) ->  u32 {
+fn epsilon(input: &Vec<u32>) -> u32 {
     let gamma = gamma(input);
     let max = *input.iter().max().unwrap();
     let start = significant_bitcount(max).unwrap();
@@ -229,7 +250,6 @@ fn epsilon(input: &Vec<u32>) ->  u32 {
     for i in start..32 {
         if !gamma.get_bit(i).unwrap() {
             ret = ret.set_bit(i).unwrap()
-
         }
     }
     ret
