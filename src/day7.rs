@@ -138,6 +138,7 @@ mod tests {
     use super::*;
 
     const EXAMPLE: &str = "16,1,2,0,4,2,7,1,2,14";
+
     #[test]
     fn part1_examples() {
         assert_eq!(37, part1(&parse_input(EXAMPLE)));
