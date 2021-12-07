@@ -137,8 +137,8 @@ fn part2(input: &[i64]) -> usize {
 fn count_increases(collection: &[i64]) -> usize {
     collection
         .windows(2)
-        .map(|window| if window[1] > window[0] { 1 } else { 0 })
-        .sum()
+        .filter(|window| window[1] > window[0])
+        .count()
 }
 
 #[cfg(test)]
