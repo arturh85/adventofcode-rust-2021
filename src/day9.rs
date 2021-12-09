@@ -1,5 +1,4 @@
-//! Day 9: Smoke Basin ---
-//! ----------------------
+//! # [Day 9: Smoke Basin](https://adventofcode.com/2021/day/9)
 //!
 //! These caves seem to be [lava tubes](https://en.wikipedia.org/wiki/Lava_tube).
 //! Parts are even still volcanically active; small hydrothermal vents release smoke into the
@@ -40,8 +39,7 @@
 //! Find all of the low points on your heightmap.
 //! **What is the sum of the risk levels of all low points on your heightmap?**
 //!
-//! Part Two ---
-//! ------------
+//! # Part Two
 //!
 //! Next, you need to find the largest basins so you know what areas are most important to avoid.
 //!
