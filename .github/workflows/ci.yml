@@ -30,6 +30,8 @@ jobs:
         run: cp -r target/doc/ public/;
       - name: 🚀 execute all problems & record execution times in times.md
         run: bash .github/run.sh
+      - name: 🚀 build piechart
+        run: node .github/piechart.js
       - name: 🚚 move times.md to markdown input_dir & move generated flamegraphs to public folder
         run: mkdir markdown; mv times.md markdown/times.md; cp flamegraph*.svg markdown/; mkdir public/times/; mv flamegraph*.svg public/times/; cp markdown/times.md public/times/
       - name: ⚡ build markdown html
