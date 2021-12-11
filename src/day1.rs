@@ -159,12 +159,12 @@ mod tests {
     #[test]
     fn part1_examples() {
         // In this example, there are `7` measurements that are larger than the previous measurement.
-        assert_eq!(7, part1(&parse_input(EXAMPLE)));
+        assert_eq!(part1(&parse_input(EXAMPLE)), 7);
     }
 
     #[test]
     fn part2_examples() {
         // In this example, there are `5` sums that are larger than the previous sum.
-        assert_eq!(5, part2(&parse_input(EXAMPLE)));
+        assert_eq!(part2(&parse_input(EXAMPLE)), 5);
     }
 }

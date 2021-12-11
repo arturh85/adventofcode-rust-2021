@@ -331,17 +331,17 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 
     #[test]
     fn part1_examples() {
-        assert_eq!(26, part1(&parse_input(EXAMPLE)));
+        assert_eq!(part1(&parse_input(EXAMPLE)), 26);
     }
 
     #[test]
     fn part2_examples() {
         assert_eq!(
-            5353,
             part2(&parse_input(
                 "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
-            ))
+            )),
+            5353
         );
-        assert_eq!(61229, part2(&parse_input(EXAMPLE)));
+        assert_eq!(part2(&parse_input(EXAMPLE)), 61229);
     }
 }

@@ -241,7 +241,7 @@ mod tests {
         // In the above example, this is anywhere in the diagram with a `2` or
         // larger - a total of `5` points.
         let lines = parse_input(EXAMPLE);
-        assert_eq!(5, part1(&lines));
+        assert_eq!(part1(&lines), 5);
     }
 
     #[test]
@@ -249,6 +249,6 @@ mod tests {
         // In the above example, this is still anywhere in the diagram with a `2` or larger - now a
         // total of `12` points.
         let lines = parse_input(EXAMPLE);
-        assert_eq!(12, part2(&lines));
+        assert_eq!(part2(&lines), 12);
     }
 }

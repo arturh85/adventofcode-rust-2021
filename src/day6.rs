@@ -127,16 +127,16 @@ mod tests {
     fn part1_examples() {
         let state = parse_input(EXAMPLE);
         // In this example, after 18 days, there are a total of `26` fish.
-        assert_eq!(26, evolve(&state, 18));
+        assert_eq!(evolve(&state, 18), 26);
 
         // After 80 days, there would be a total of `5934`.
-        assert_eq!(5934, evolve(&state, 80));
+        assert_eq!(evolve(&state, 80), 5934);
     }
 
     #[test]
     fn part2_examples() {
         // After 256 days in the example above, there would be a total of `26984457539` lanternfish!
         let state = parse_input(EXAMPLE);
-        assert_eq!(26984457539, evolve(&state, 256));
+        assert_eq!(evolve(&state, 256), 26984457539);
     }
 }

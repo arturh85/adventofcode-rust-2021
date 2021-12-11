@@ -217,11 +217,11 @@ mod tests {
 
     #[test]
     fn part1_examples() {
-        assert_eq!(15, part1(&parse_input(EXAMPLE)));
+        assert_eq!(part1(&parse_input(EXAMPLE)), 15);
     }
 
     #[test]
     fn part2_examples() {
-        assert_eq!(1134, part2(&parse_input(EXAMPLE)));
+        assert_eq!(part2(&parse_input(EXAMPLE)), 1134);
     }
 }

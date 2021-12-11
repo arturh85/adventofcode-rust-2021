@@ -272,7 +272,7 @@ mod tests {
         // numbers on that board; in this case, the sum is `188`. Then, multiply that sum by the number
         // that was just called when the board won, `24`, to get the final score, `188 * 24 = 4512`.
         let result = parse_input(EXAMPLE).play_win_first().expect("no winner");
-        assert_eq!(4512, result);
+        assert_eq!(result, 4512);
     }
 
     #[test]
@@ -282,6 +282,6 @@ mod tests {
         // until this point, the second board would have a sum of unmarked numbers equal to `148` for
         // a final score of `148 * 13 = 1924`.
         let result = parse_input(EXAMPLE).play_win_last().expect("no winner");
-        assert_eq!(1924, result);
+        assert_eq!(result, 1924);
     }
 }

@@ -275,22 +275,22 @@ mod tests {
     #[test]
     fn part1_examples() {
         // So, the gamma rate is the binary number `10110`, or `22` in decimal.
-        assert_eq!(0b1_0110, gamma(&parse_input(EXAMPLE)));
-        assert_eq!(22, gamma(&parse_input(EXAMPLE)));
+        assert_eq!(gamma(&parse_input(EXAMPLE)), 0b1_0110);
+        assert_eq!(gamma(&parse_input(EXAMPLE)), 22);
 
         // So, the epsilon rate is `01001`, or `9` in decimal.
-        assert_eq!(0b1001, epsilon(&parse_input(EXAMPLE)));
-        assert_eq!(9, epsilon(&parse_input(EXAMPLE)));
+        assert_eq!(epsilon(&parse_input(EXAMPLE)), 0b1001);
+        assert_eq!(epsilon(&parse_input(EXAMPLE)), 9);
     }
 
     #[test]
     fn part2_examples() {
         // the oxygen generator rating is `10111`, or `23` in decimal.
-        assert_eq!(0b1_0111, oxygen(&parse_input(EXAMPLE)));
-        assert_eq!(23, oxygen(&parse_input(EXAMPLE)));
+        assert_eq!(oxygen(&parse_input(EXAMPLE)), 0b1_0111);
+        assert_eq!(oxygen(&parse_input(EXAMPLE)), 23);
 
         // the CO2 scrubber rating is `01010`, or `10` in decimal.
-        assert_eq!(0b0_1010, co2(&parse_input(EXAMPLE)));
-        assert_eq!(10, co2(&parse_input(EXAMPLE)));
+        assert_eq!(co2(&parse_input(EXAMPLE)), 0b0_1010);
+        assert_eq!(co2(&parse_input(EXAMPLE)), 10);
     }
 }

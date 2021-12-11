@@ -164,7 +164,7 @@ forward 2";
         // After following these instructions, you would have a horizontal position
         // of `15` and a depth of `10`. (Multiplying these together produces `150`.)
         let pos = execute1(&parse_input(EXAMPLE));
-        assert_eq!((15, 10), pos);
+        assert_eq!(pos, (15, 10));
     }
 
     #[test]
@@ -172,6 +172,6 @@ forward 2";
         // After following these new instructions, you would have a horizontal position of `15` and
         // a depth of `60`. (Multiplying these produces `900`.)
         let pos = execute2(&parse_input(EXAMPLE));
-        assert_eq!((15, 60), pos);
+        assert_eq!(pos, (15, 60));
     }
 }

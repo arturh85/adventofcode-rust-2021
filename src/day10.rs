@@ -262,45 +262,45 @@ mod tests {
     #[test]
     fn part1_examples() {
         // So, () is a legal chunk that contains no other chunks, as is [].
-        assert_eq!(Ok(LineStatus::Complete), check_line("()"));
-        assert_eq!(Ok(LineStatus::Complete), check_line("[]"));
+        assert_eq!(check_line("()"), Ok(LineStatus::Complete));
+        assert_eq!(check_line("[]"), Ok(LineStatus::Complete));
 
         // More complex but valid chunks include ([]), {()()()},
-        assert_eq!(Ok(LineStatus::Complete), check_line("([])"));
-        assert_eq!(Ok(LineStatus::Complete), check_line("{()()()}"));
+        assert_eq!(check_line("([])"), Ok(LineStatus::Complete));
+        assert_eq!(check_line("{()()()}"), Ok(LineStatus::Complete));
 
         // <([{}])>, [<>({}){}[([])<>]], and even (((((((((()))))))))).
-        assert_eq!(Ok(LineStatus::Complete), check_line("<([{}])>"));
-        assert_eq!(Ok(LineStatus::Complete), check_line("[<>({}){}[([])<>]]"));
-        assert_eq!(Ok(LineStatus::Complete), check_line("(((((((((())))))))))"));
+        assert_eq!(check_line("<([{}])>"), Ok(LineStatus::Complete));
+        assert_eq!(check_line("[<>({}){}[([])<>]]"), Ok(LineStatus::Complete));
+        assert_eq!(check_line("(((((((((())))))))))"), Ok(LineStatus::Complete));
 
         // `{([(<{}[<>[]}>{[]{[(<()>` - Expected `]`, but found `}` instead.
-        assert_eq!(Err((']', '}')), check_line("{([(<{}[<>[]}>{[]{[(<()>"));
+        assert_eq!(check_line("{([(<{}[<>[]}>{[]{[(<()>"), Err((']', '}')));
         // `[[<[([]))<([[{}[[()]]]` - Expected `]`, but found `)` instead.
-        assert_eq!(Err((']', ')')), check_line("[[<[([]))<([[{}[[()]]]"));
+        assert_eq!(check_line("[[<[([]))<([[{}[[()]]]"), Err((']', ')')));
         // `[{[{({}]{}}([{[{{{}}([]` - Expected `)`, but found `]` instead.
-        assert_eq!(Err((')', ']')), check_line("[{[{({}]{}}([{[{{{}}([]"));
+        assert_eq!(check_line("[{[{({}]{}}([{[{{{}}([]"), Err((')', ']')));
         // `[<(<(<(<{}))><([]([]()` - Expected `>`, but found `)` instead.
-        assert_eq!(Err(('>', ')')), check_line("[<(<(<(<{}))><([]([]()"));
+        assert_eq!(check_line("[<(<(<(<{}))><([]([]()"), Err(('>', ')')));
         // `<{([([[(<>()){}]>(<<{{` - Expected `]`, but found `>` instead.
-        assert_eq!(Err((']', '>')), check_line("<{([([[(<>()){}]>(<<{{"));
+        assert_eq!(check_line("<{([([[(<>()){}]>(<<{{"), Err((']', '>')));
 
-        assert_eq!(26397, part1(EXAMPLE));
+        assert_eq!(part1(EXAMPLE), 26397);
     }
 
     #[test]
     fn part2_examples() {
         // [({(<(())[]>[[{[]{<()<>> - Complete by adding }}]])})]. - 288957 total points.
-        assert_eq!(288957, incomplete_score("[({(<(())[]>[[{[]{<()<>>"));
+        assert_eq!(incomplete_score("[({(<(())[]>[[{[]{<()<>>"), 288957);
         // [(()[<>])]({[<{<<[]>>( - Complete by adding )}>]}).     - 5566 total points.
-        assert_eq!(5566, incomplete_score("[(()[<>])]({[<{<<[]>>("));
+        assert_eq!(incomplete_score("[(()[<>])]({[<{<<[]>>("), 5566);
         // (((({<>}<{<{<>}{[]{[]{} - Complete by adding }}>}>)))). - 1480781 total points.
-        assert_eq!(1480781, incomplete_score("(((({<>}<{<{<>}{[]{[]{}"));
+        assert_eq!(incomplete_score("(((({<>}<{<{<>}{[]{[]{}"), 1480781);
         // {<[[]]>}<{[{[{[]{()[[[] - Complete by adding ]]}}]}]}>. - 995444 total points.
-        assert_eq!(995444, incomplete_score("{<[[]]>}<{[{[{[]{()[[[]"));
+        assert_eq!(incomplete_score("{<[[]]>}<{[{[{[]{()[[[]"), 995444);
         // <{([{{}}[<[[[<>{}]]]>[]] - Complete by adding ])}>.     - 294 total points.
-        assert_eq!(294, incomplete_score("<{([{{}}[<[[[<>{}]]]>[]]"));
+        assert_eq!(incomplete_score("<{([{{}}[<[[[<>{}]]]>[]]"), 294);
 
-        assert_eq!(288957, part2(EXAMPLE));
+        assert_eq!(part2(EXAMPLE), 288957);
     }
 }

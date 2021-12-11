@@ -147,12 +147,12 @@ mod tests {
     #[test]
     fn part1_examples() {
         // This costs a total of `37` fuel. This is the cheapest possible outcome
-        assert_eq!(37, part1(&parse_input(EXAMPLE)));
+        assert_eq!(part1(&parse_input(EXAMPLE)), 37);
     }
 
     #[test]
     fn part2_examples() {
         //  This costs a total of `168` fuel. This is the new cheapest possible outcome
-        assert_eq!(168, part2(&parse_input(EXAMPLE)));
+        assert_eq!(part2(&parse_input(EXAMPLE)), 168);
     }
 }
