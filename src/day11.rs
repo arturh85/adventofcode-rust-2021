@@ -513,29 +513,29 @@ fn get_neighbors(energy_map: &Vec<Vec<u8>>, pos: &(usize, usize)) -> Vec<(usize,
     list
 }
 
-fn string_evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, String) {
-    let (flashes, grid) = evolve(energy_map, steps);
-    (flashes, stringify(&grid))
-}
-
-fn stringify(energy_map: &Vec<Vec<u8>>) -> String {
-    let mut out = String::new();
-    for (idx, row) in energy_map.iter().enumerate() {
-        let mut line = String::new();
-        for (_, col) in row.iter().enumerate() {
-            line += &col.to_string();
-        }
-        out += &line;
-        if idx < energy_map.len() - 1 {
-            out += "\n";
-        }
-    }
-    out
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn string_evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, String) {
+        let (flashes, grid) = evolve(energy_map, steps);
+        (flashes, stringify(&grid))
+    }
+
+    fn stringify(energy_map: &Vec<Vec<u8>>) -> String {
+        let mut out = String::new();
+        for (idx, row) in energy_map.iter().enumerate() {
+            let mut line = String::new();
+            for (_, col) in row.iter().enumerate() {
+                line += &col.to_string();
+            }
+            out += &line;
+            if idx < energy_map.len() - 1 {
+                out += "\n";
+            }
+        }
+        out
+    }
 
     const SMALL_EXAMPLE_0: &str = "11111
 19991
