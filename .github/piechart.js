@@ -146,7 +146,6 @@ if (day !== -1) {
     total_time_in_micro_seconds += time_in_micro_seconds;
 }
 
-console.log('updated pie chart url')
-lines[4] = '## Distribution of ' + (total_time_in_micro_seconds / 1000000.0).toFixed(2) + " seconds";
+lines[4] = '## Distribution of ' + (total_time_in_micro_seconds / 1000.0).toFixed(2) + " ms";
 lines[5] = '![Pie Chart](' + prefix + encodeURIComponent(JSON.stringify(chart)) + ')';
 fs.writeFileSync("times.md", lines.join('\n'));
