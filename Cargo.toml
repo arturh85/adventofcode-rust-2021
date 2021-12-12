@@ -14,6 +14,7 @@ anyhow = "*"
 bitlab = "*" # day 03
 grid = "*" # day 05
 ndarray = "*" # day 11
+petgraph = "*" # day 12
 #serde_json = "*" # day 12
 #itertools = "*" # day 03
 #rust-crypto = "*" # day 04

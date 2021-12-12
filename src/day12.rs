@@ -184,91 +184,119 @@
 //!
 //! **Given these new rules, how many paths through this cave system are there?**
 
+use petgraph::graph::NodeIndex;
+use petgraph::visit::EdgeRef;
+use petgraph::Graph;
+use std::cell::RefCell;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
 #[aoc_generator(day12)]
-fn parse_input(input: &str) -> Vec<(String, String)> {
-    input
-        .lines()
-        .map(|line| {
-            let parts: Vec<&str> = line.split('-').map(|p| p).collect();
-            (parts[0].to_string(), parts[1].to_string())
-        })
-        .collect()
+fn parse_input(input: &str) -> Graph<CaveNode, ()> {
+    let mut graph = Graph::new();
+    let mut node_by_name: HashMap<String, NodeIndex> = HashMap::new();
+    for line in input.lines() {
+        let parts: Vec<&str> = line.split('-').map(|p| p).collect();
+        let from_name = parts[0];
+        let to_name = parts[1];
+        if !node_by_name.contains_key(from_name) {
+            let idx = graph.add_node(CaveNode::parse(from_name));
+            node_by_name.insert(from_name.to_string(), idx);
+        }
+        if !node_by_name.contains_key(to_name) {
+            let idx = graph.add_node(CaveNode::parse(to_name));
+            node_by_name.insert(to_name.to_string(), idx);
+        }
+        let from_idx = node_by_name[from_name];
+        let to_idx = node_by_name[to_name];
+        graph.add_edge(from_idx, to_idx, ());
+        graph.add_edge(to_idx, from_idx, ());
+    }
+    graph
 }
 
 /// Part 1: How many paths through this cave system are there that visit small caves at most once?
 #[aoc(day12, part1)]
-fn part1(input: &Vec<(String, String)>) -> usize {
+fn part1(input: &Graph<CaveNode, ()>) -> usize {
     build_paths(input, 1).len()
 }
 
 /// Part 2: Given these new rules, how many paths through this cave system are there?
 #[aoc(day12, part2)]
-fn part2(input: &Vec<(String, String)>) -> usize {
+fn part2(input: &Graph<CaveNode, ()>) -> usize {
     build_paths(input, 2).len()
 }
 
-fn map_by_start(input: &Vec<(String, String)>) -> HashMap<String, Vec<(String, String)>> {
-    let mut by_start: HashMap<String, Vec<(String, String)>> = HashMap::new();
-    for (from, to) in input {
-        if !by_start.contains_key(from) {
-            by_start.insert(from.to_string(), Vec::new());
-        }
-        if !by_start.contains_key(to) {
-            by_start.insert(to.to_string(), Vec::new());
-        }
-        by_start
-            .get_mut(from)
-            .unwrap()
-            .push((from.to_string(), to.to_string()));
-        by_start
-            .get_mut(to)
-            .unwrap()
-            .push((to.to_string(), from.to_string()));
-    }
-    by_start
+#[derive(Clone, Debug)]
+enum CaveNode {
+    Start,
+    End,
+    SmallCave(String),
+    BigCave(String),
 }
 
-fn is_small_cave(name: &str) -> bool {
-    match name {
-        "start" | "end" => false,
-        name => name.chars().nth(0).unwrap().is_lowercase(),
+impl CaveNode {
+    fn _name(&self) -> &str {
+        match self {
+            CaveNode::Start => "start",
+            CaveNode::End => "end",
+            CaveNode::SmallCave(name) => name,
+            CaveNode::BigCave(name) => name,
+        }
+    }
+    fn parse(name: &str) -> CaveNode {
+        match name {
+            "start" => CaveNode::Start,
+            "end" => CaveNode::End,
+            name => match name.chars().nth(0).unwrap().is_lowercase() {
+                true => CaveNode::SmallCave(name.to_string()),
+                false => CaveNode::BigCave(name.to_string()),
+            },
+        }
     }
 }
 
 fn decend(
-    edges: &HashMap<String, Vec<(String, String)>>,
-    visited: Arc<Mutex<Vec<String>>>,
-    mut small_caves: HashMap<String, u8>,
+    graph: &Graph<CaveNode, ()>,
+    visited: Arc<RefCell<Vec<Vec<NodeIndex>>>>,
+    mut small_caves: HashMap<NodeIndex, u8>,
     max_small_caves: u8,
-    path: Vec<String>,
-) -> Vec<Vec<String>> {
+    path: Vec<NodeIndex>,
+) -> Vec<Vec<NodeIndex>> {
     let mut paths = Vec::new();
-    let last = path.last().unwrap();
-    if is_small_cave(last) {
-        if !small_caves.contains_key(last) {
-            small_caves.insert(last.to_string(), 0);
+    let last_idx = *path.last().unwrap();
+    let last_node = graph.node_weight(last_idx).unwrap();
+    if let CaveNode::SmallCave(_) = last_node {
+        if !small_caves.contains_key(&last_idx) {
+            small_caves.insert(last_idx, 0);
         }
-        *small_caves.get_mut(last).unwrap() += 1;
+        *small_caves.get_mut(&last_idx).unwrap() += 1;
     }
-    if edges.contains_key(last) {
-        for (_, next) in &edges[last] {
-            let mut new_path = path.clone();
-            new_path.push(next.to_string());
-            if next == "start" {
-            } else if next == "end" {
+
+    for edge in graph.edges(last_idx) {
+        let target_idx = if edge.source() == last_idx {
+            edge.target()
+        } else {
+            edge.source()
+        };
+        let target_node = graph.node_weight(target_idx).unwrap();
+
+        match target_node {
+            CaveNode::Start => {}
+            CaveNode::End => {
+                let mut new_path = path.clone();
+                new_path.push(target_idx);
                 paths.push(new_path);
-            } else {
-                if is_small_cave(next) && small_caves.contains_key(next) {
-                    let cnt = small_caves[next];
+            }
+            CaveNode::SmallCave(_) => {
+                if small_caves.contains_key(&target_idx) {
+                    let cnt = small_caves[&target_idx];
                     if cnt >= max_small_caves {
                         continue;
                     } else if max_small_caves > 1 {
                         let mut found_bad = false;
                         for key in small_caves.keys() {
-                            if key != next && small_caves[key] >= max_small_caves {
+                            if *key != target_idx && small_caves[&key] >= max_small_caves {
                                 found_bad = true;
                             }
                         }
@@ -277,13 +305,18 @@ fn decend(
                         }
                     }
                 }
-                let str_path = new_path.join(",");
-                let mut breadcrumb = visited.lock().unwrap();
-                if !breadcrumb.contains(&str_path) {
-                    breadcrumb.push(str_path);
-                    drop(breadcrumb);
+            }
+            _ => {}
+        };
+        match target_node {
+            CaveNode::SmallCave(_) | CaveNode::BigCave(_) => {
+                let mut new_path = path.clone();
+                new_path.push(target_idx);
+                // println!(" found cave");
+                if !visited.borrow().contains(&new_path) {
+                    visited.borrow_mut().push(new_path.clone());
                     paths.append(&mut decend(
-                        edges,
+                        graph,
                         visited.clone(),
                         small_caves.clone(),
                         max_small_caves,
@@ -291,27 +324,45 @@ fn decend(
                     ));
                 }
             }
-        }
+            _ => {}
+        };
     }
+
+    // if edges.contains_key(last_idx) {
+    //     for (_, next) in &edges[last_idx] {}
+    // }
     paths
 }
 
-fn build_paths(input: &Vec<(String, String)>, max_small_caves: u8) -> Vec<Vec<String>> {
+fn build_paths(graph: &Graph<CaveNode, ()>, max_small_caves: u8) -> Vec<Vec<NodeIndex>> {
     let mut paths = Vec::new();
-    let by_start = map_by_start(input);
-    let history = Arc::new(Mutex::new(Vec::new()));
+    let history = Arc::new(RefCell::new(Vec::new()));
 
-    for (_, first) in &by_start["start"] {
-        let small_caves = HashMap::new();
-        paths.append(&mut decend(
-            &by_start,
-            history.clone(),
-            small_caves,
-            max_small_caves,
-            vec!["start".into(), first.to_string()],
-        ));
+    for node_idx in graph.node_indices() {
+        match graph.node_weight(node_idx).unwrap() {
+            CaveNode::Start => {
+                // println!("found start");
+                for edge in graph.edges(node_idx) {
+                    let target_idx = if edge.source() == node_idx {
+                        edge.target()
+                    } else {
+                        edge.source()
+                    };
+
+                    let small_caves = HashMap::new();
+                    paths.append(&mut decend(
+                        &graph,
+                        history.clone(),
+                        small_caves,
+                        max_small_caves,
+                        vec![node_idx, target_idx],
+                    ));
+                }
+                break;
+            }
+            _ => {}
+        }
     }
-
     paths
 }
 
@@ -328,14 +379,6 @@ A-end
 b-end";
 
     #[test]
-    fn is_small_cave_test() {
-        assert_eq!(is_small_cave("start"), false);
-        assert_eq!(is_small_cave("end"), false);
-        assert_eq!(is_small_cave("foo"), true);
-        assert_eq!(is_small_cave("Bar"), false);
-    }
-
-    #[test]
     fn part1_examples() {
         let expected_paths = vec![
             "start,A,b,A,c,A,end",
@@ -349,10 +392,17 @@ b-end";
             "start,b,A,end",
             "start,b,end",
         ];
+        let grid = parse_input(EXAMPLE);
 
-        let actual_paths: Vec<String> = build_paths(&parse_input(EXAMPLE), 1)
+        let actual_paths: Vec<String> = build_paths(&grid, 1)
             .iter()
-            .map(|c| c.join(","))
+            .map(|c| {
+                let foo: Vec<String> = c
+                    .iter()
+                    .map(|f| grid.node_weight(*f).unwrap()._name().to_string())
+                    .collect();
+                foo.join(",")
+            })
             .collect();
         for actual_path in &actual_paths {
             assert!(
@@ -410,9 +460,17 @@ b-end";
             "start,b,d,b,end",
             "start,b,end",
         ];
-        let actual_paths: Vec<String> = build_paths(&parse_input(EXAMPLE), 2)
+        let grid = parse_input(EXAMPLE);
+
+        let actual_paths: Vec<String> = build_paths(&grid, 2)
             .iter()
-            .map(|c| c.join(","))
+            .map(|c| {
+                let foo: Vec<String> = c
+                    .iter()
+                    .map(|f| grid.node_weight(*f).unwrap()._name().to_string())
+                    .collect();
+                foo.join(",")
+            })
             .collect();
         for actual_path in &actual_paths {
             assert!(
