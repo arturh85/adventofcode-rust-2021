@@ -27,7 +27,7 @@
 //!
 //! ```plain
 //!     start
-//!     /\
+//!     /    \
 //! c--A-----b--d
 //!     \   /
 //!      end
@@ -236,14 +236,6 @@ enum CaveNode {
 }
 
 impl CaveNode {
-    fn _name(&self) -> &str {
-        match self {
-            CaveNode::Start => "start",
-            CaveNode::End => "end",
-            CaveNode::SmallCave(name) => name,
-            CaveNode::BigCave(name) => name,
-        }
-    }
     fn parse(name: &str) -> CaveNode {
         match name {
             "start" => CaveNode::Start,
@@ -264,7 +256,7 @@ fn decend(
     path: Vec<NodeIndex>,
 ) -> Vec<Vec<NodeIndex>> {
     let mut paths = Vec::new();
-    let last_idx = *path.last().unwrap();
+    let last_idx = path[path.len() - 1];
     let last_node = graph.node_weight(last_idx).unwrap();
     if let CaveNode::SmallCave(_) = last_node {
         if !small_caves.contains_key(&last_idx) {
@@ -272,13 +264,8 @@ fn decend(
         }
         *small_caves.get_mut(&last_idx).unwrap() += 1;
     }
-
     for edge in graph.edges(last_idx) {
-        let target_idx = if edge.source() == last_idx {
-            edge.target()
-        } else {
-            edge.source()
-        };
+        let target_idx = edge.target();
         let target_node = graph.node_weight(target_idx).unwrap();
 
         match target_node {
@@ -312,7 +299,6 @@ fn decend(
             CaveNode::SmallCave(_) | CaveNode::BigCave(_) => {
                 let mut new_path = path.clone();
                 new_path.push(target_idx);
-                // println!(" found cave");
                 if !visited.borrow().contains(&new_path) {
                     visited.borrow_mut().push(new_path.clone());
                     paths.append(&mut decend(
@@ -327,10 +313,6 @@ fn decend(
             _ => {}
         };
     }
-
-    // if edges.contains_key(last_idx) {
-    //     for (_, next) in &edges[last_idx] {}
-    // }
     paths
 }
 
@@ -341,14 +323,8 @@ fn build_paths(graph: &Graph<CaveNode, ()>, max_small_caves: u8) -> Vec<Vec<Node
     for node_idx in graph.node_indices() {
         match graph.node_weight(node_idx).unwrap() {
             CaveNode::Start => {
-                // println!("found start");
                 for edge in graph.edges(node_idx) {
-                    let target_idx = if edge.source() == node_idx {
-                        edge.target()
-                    } else {
-                        edge.source()
-                    };
-
+                    let target_idx = edge.target();
                     let small_caves = HashMap::new();
                     paths.append(&mut decend(
                         &graph,
@@ -358,6 +334,10 @@ fn build_paths(graph: &Graph<CaveNode, ()>, max_small_caves: u8) -> Vec<Vec<Node
                         vec![node_idx, target_idx],
                     ));
                 }
+
+                // let mut dfs = Dfs::new(&graph, node_idx);
+                // while let Some(nx) = dfs.next(&graph) {}
+
                 break;
             }
             _ => {}
@@ -369,6 +349,15 @@ fn build_paths(graph: &Graph<CaveNode, ()>, max_small_caves: u8) -> Vec<Vec<Node
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn cave_name(cave_node: &CaveNode) -> &str {
+        match cave_node {
+            CaveNode::Start => "start",
+            CaveNode::End => "end",
+            CaveNode::SmallCave(name) => name,
+            CaveNode::BigCave(name) => name,
+        }
+    }
 
     const EXAMPLE: &str = "start-A
 start-b
@@ -399,7 +388,7 @@ b-end";
             .map(|c| {
                 let foo: Vec<String> = c
                     .iter()
-                    .map(|f| grid.node_weight(*f).unwrap()._name().to_string())
+                    .map(|f| cave_name(grid.node_weight(*f).unwrap()).to_string())
                     .collect();
                 foo.join(",")
             })
@@ -464,12 +453,12 @@ b-end";
 
         let actual_paths: Vec<String> = build_paths(&grid, 2)
             .iter()
-            .map(|c| {
-                let foo: Vec<String> = c
+            .map(|nodes| {
+                let path: Vec<String> = nodes
                     .iter()
-                    .map(|f| grid.node_weight(*f).unwrap()._name().to_string())
+                    .map(|f| cave_name(grid.node_weight(*f).unwrap()).to_string())
                     .collect();
-                foo.join(",")
+                path.join(",")
             })
             .collect();
         for actual_path in &actual_paths {
