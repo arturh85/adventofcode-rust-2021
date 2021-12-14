@@ -371,41 +371,38 @@
 //!
 //! **What is the first step during which all octopuses flash?**
 
+use ndarray::Array2;
+
 #[aoc_generator(day11)]
-fn parse_input(input: &str) -> Vec<Vec<u8>> {
-    input
-        .lines()
-        .map(|line| {
-            line.chars()
-                .map(|c| c.to_string().parse().unwrap())
-                .collect()
-        })
-        .collect()
+fn parse_input(input: &str) -> Array2<u8> {
+    let mut grid: Array2<u8> =
+        Array2::default((input.lines().count(), input.lines().nth(0).unwrap().len()));
+    for (y, line) in input.lines().enumerate() {
+        for (x, digit) in line.chars().enumerate() {
+            grid[(y, x)] = digit.to_string().parse().unwrap();
+        }
+    }
+    grid
 }
 
 /// Part 1: Given the starting energy levels of the dumbo octopuses in your cavern,
 /// simulate 100 steps. How many total flashes are there after 100 steps?
 #[aoc(day11, part1)]
-fn part1(input: &Vec<Vec<u8>>) -> usize {
+fn part1(input: &Array2<u8>) -> usize {
     let (flashes, _grid) = evolve(input, 100);
     flashes
 }
 
 /// Part 2: What is the first step during which all octopuses flash?
 #[aoc(day11, part2)]
-fn part2(input: &Vec<Vec<u8>>) -> usize {
+fn part2(input: &Array2<u8>) -> usize {
     let mut step = 0;
-    let mut state = input.clone();
+    let mut state = (*input).clone();
     loop {
         let (_, new_state) = evolve(&state, 1);
         state = new_state;
         step += 1;
-        if state
-            .iter()
-            .map(|row| row.iter().map(|v| *v as u64).sum::<u64>())
-            .sum::<u64>()
-            == 0
-        {
+        if state.iter().map(|s| *s as u64).sum::<u64>() == 0 {
             break;
         }
     }
@@ -427,19 +424,19 @@ fn part2(input: &Vec<Vec<u8>>) -> usize {
 ///
 /// Adjacent flashes can cause an octopus to flash on a step even if it begins that
 /// step with very little energy.
-fn evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, Vec<Vec<u8>>) {
-    let mut state = energy_map.clone();
+fn evolve(energy_map: &Array2<u8>, steps: usize) -> (usize, Array2<u8>) {
+    let mut state = (*energy_map).clone();
     let mut flashes = 0;
     for _ in 0..steps {
-        let mut next_state = zero_grid(energy_map);
+        let shape = energy_map.shape();
+        let mut next_state = Array2::zeros((shape[0], shape[1]));
         let mut step_flashes: Vec<(usize, usize)> = Vec::new();
-        // println!("state {:?}", state);
-        for (y, row) in state.iter().enumerate() {
+        for (y, row) in state.rows().into_iter().enumerate() {
             for (x, col) in row.iter().enumerate() {
                 if *col < 9 {
-                    next_state[y][x] = *col + 1;
+                    next_state[(y, x)] = *col + 1;
                 } else {
-                    next_state[y][x] = 0;
+                    next_state[(y, x)] = 0;
                     step_flashes.push((y, x));
                 }
             }
@@ -451,12 +448,11 @@ fn evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, Vec<Vec<u8>>) {
                 if step_flashes.contains(&(y, x)) {
                     continue;
                 }
-
-                let value = next_state[y][x];
+                let value = next_state[(y, x)];
                 if value < 9 {
-                    next_state[y][x] = value + 1;
+                    next_state[(y, x)] = value + 1;
                 } else {
-                    next_state[y][x] = 0;
+                    next_state[(y, x)] = 0;
                     if !step_flashes.contains(&(y, x)) {
                         todo_flashes.push((y, x));
                         step_flashes.push((y, x));
@@ -464,7 +460,6 @@ fn evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, Vec<Vec<u8>>) {
                 }
             }
         }
-
         // println!("next state {:?}", next_state);
         state = next_state;
         flashes += step_flashes.len();
@@ -472,19 +467,8 @@ fn evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, Vec<Vec<u8>>) {
     (flashes, state)
 }
 
-fn zero_grid(energy_map: &Vec<Vec<u8>>) -> Vec<Vec<u8>> {
-    let mut out = Vec::new();
-    for row in energy_map {
-        let mut outrow = Vec::new();
-        for _ in row {
-            outrow.push(0);
-        }
-        out.push(outrow);
-    }
-    out
-}
-
-fn get_neighbors(energy_map: &Vec<Vec<u8>>, pos: &(usize, usize)) -> Vec<(usize, usize)> {
+fn get_neighbors(energy_map: &Array2<u8>, pos: &(usize, usize)) -> Vec<(usize, usize)> {
+    let shape = energy_map.shape();
     let mut list = Vec::new();
     if pos.0 > 0 {
         list.push((pos.0 - 1, pos.1));
@@ -492,22 +476,22 @@ fn get_neighbors(energy_map: &Vec<Vec<u8>>, pos: &(usize, usize)) -> Vec<(usize,
     if pos.1 > 0 {
         list.push((pos.0, pos.1 - 1));
     }
-    if pos.0 < energy_map.len() - 1 {
+    if pos.0 < shape[0] - 1 {
         list.push((pos.0 + 1, pos.1));
     }
-    if pos.1 < energy_map[0].len() - 1 {
+    if pos.1 < shape[1] - 1 {
         list.push((pos.0, pos.1 + 1));
     }
     if pos.0 > 0 && pos.1 > 0 {
         list.push((pos.0 - 1, pos.1 - 1));
     }
-    if pos.0 > 0 && pos.1 < energy_map[0].len() - 1 {
+    if pos.0 > 0 && pos.1 < shape[1] - 1 {
         list.push((pos.0 - 1, pos.1 + 1));
     }
-    if pos.0 < energy_map.len() - 1 && pos.1 > 0 {
+    if pos.0 < shape[0] - 1 && pos.1 > 0 {
         list.push((pos.0 + 1, pos.1 - 1));
     }
-    if pos.0 < energy_map.len() - 1 && pos.1 < energy_map[0].len() - 1 {
+    if pos.0 < shape[0] - 1 && pos.1 < shape[1] - 1 {
         list.push((pos.0 + 1, pos.1 + 1));
     }
     list
@@ -517,20 +501,20 @@ fn get_neighbors(energy_map: &Vec<Vec<u8>>, pos: &(usize, usize)) -> Vec<(usize,
 mod tests {
     use super::*;
 
-    fn string_evolve(energy_map: &Vec<Vec<u8>>, steps: usize) -> (usize, String) {
+    fn string_evolve(energy_map: &Array2<u8>, steps: usize) -> (usize, String) {
         let (flashes, grid) = evolve(energy_map, steps);
         (flashes, stringify(&grid))
     }
 
-    fn stringify(energy_map: &Vec<Vec<u8>>) -> String {
+    fn stringify(energy_map: &Array2<u8>) -> String {
         let mut out = String::new();
-        for (idx, row) in energy_map.iter().enumerate() {
+        for (idx, row) in energy_map.rows().into_iter().enumerate() {
             let mut line = String::new();
             for (_, col) in row.iter().enumerate() {
                 line += &col.to_string();
             }
             out += &line;
-            if idx < energy_map.len() - 1 {
+            if idx < energy_map.rows().into_iter().count() - 1 {
                 out += "\n";
             }
         }
