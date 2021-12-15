@@ -221,11 +221,11 @@ fn part1(input: &Graph<CaveNode, ()>) -> usize {
     build_paths(input, 1).len()
 }
 
-/// Part 2: Given these new rules, how many paths through this cave system are there?
-#[aoc(day12, part2)]
-fn part2(input: &Graph<CaveNode, ()>) -> usize {
-    build_paths(input, 2).len()
-}
+// /// Part 2: Given these new rules, how many paths through this cave system are there?
+// #[aoc(day12, part2)]
+// fn part2(input: &Graph<CaveNode, ()>) -> usize {
+//     build_paths(input, 2).len()
+// }
 
 #[derive(Clone, Debug)]
 enum CaveNode {
