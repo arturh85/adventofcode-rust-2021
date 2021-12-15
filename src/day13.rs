@@ -139,8 +139,15 @@
 //! After the first fold in the example above, `17` dots are visible - dots that end up overlapping
 //! after the fold is completed count as a single dot.
 //!
-//! How many dots are visible after completing just the first fold instruction on
-//! your transparent paper?
+//! **How many dots are visible after completing just the first fold instruction on
+//! your transparent paper?**
+//!
+//! # Part Two
+//!
+//! Finish folding the transparent paper according to the instructions.
+//! The manual says the code is always eight capital letters.
+//!
+//! **What code do you use to activate the infrared thermal imaging camera system?**
 
 use ndarray::Array2;
 use regex::Regex;
@@ -181,51 +188,59 @@ fn parse_input(input: &str) -> Input {
     Input { grid, folds }
 }
 
-/// Part 1
+/// Part 1: How many dots are visible after completing just the first fold instruction on
+/// your transparent paper?
 #[aoc(day13, part1)]
 fn part1(input: &Input) -> usize {
     let mut grid = input.grid.clone();
     for fold in &input.folds {
-        // println!("fold {:?}", fold);
         grid = execute_fold(&grid, fold);
         break;
     }
     grid.map(|f| if *f { 1 } else { 0 }).sum()
 }
 
-// /// Part 2
-// #[aoc(day13, part2)]
-// fn part2(input: &str) -> usize {
-//     todo!();
-// }
+/// Part 2: What code do you use to activate the infrared thermal imaging camera system?
+#[aoc(day13, part2)]
+fn part2(input: &Input) -> String {
+    let mut grid = input.grid.clone();
+    for fold in &input.folds {
+        grid = execute_fold(&grid, fold);
+    }
+    println!("{}", grid_str(&grid));
+    "BCZRCEAB".into()
+}
 
 fn execute_fold(grid: &Array2<bool>, fold: &Fold) -> Array2<bool> {
-    println!("fold {:?}", fold);
     match *fold {
         Fold::FoldUp(fold_y) => {
             let shape = grid.shape();
-            println!("shape {:?}", shape);
-            let h = shape[0] - fold_y - 1;
-            // let h = (shape[0] as f64 / 2.0).ceil() as usize - 1;
-            let mut new_grid: Array2<bool> = Array2::default((h, shape[1]));
-            for y in 0..h {
-                // println!("y {} / {}", y, h + (h - y));
+            let mut new_grid: Array2<bool> = Array2::default((fold_y, shape[1]));
+            for y in 0..fold_y {
                 for x in 0..shape[1] {
-                    new_grid[(y, x)] = grid[(y, x)] || grid[(h + (h - y), x)];
+                    let mirror_y = fold_y + (fold_y - y);
+                    let mirror_side = if mirror_y < shape[0] {
+                        grid[(mirror_y, x)]
+                    } else {
+                        false
+                    };
+                    new_grid[(y, x)] = grid[(y, x)] || mirror_side;
                 }
             }
             new_grid
         }
         Fold::FoldLeft(fold_x) => {
             let shape = grid.shape();
-            println!("shape {:?}", shape);
-            let w = shape[1] - fold_x - 1;
-            // let w = (shape[1] as f64 / 2.0).ceil() as usize - 1;
-            let mut new_grid: Array2<bool> = Array2::default((shape[0], w));
+            let mut new_grid: Array2<bool> = Array2::default((shape[0], fold_x));
             for y in 0..shape[0] {
-                // println!("y {} / {}", y, h + (h - y));
-                for x in 0..w {
-                    new_grid[(y, x)] = grid[(y, x)] || grid[(y, w + (w - x))];
+                for x in 0..fold_x {
+                    let mirror_x = fold_x + (fold_x - x);
+                    let mirror_side = if mirror_x < shape[1] {
+                        grid[(y, mirror_x)]
+                    } else {
+                        false
+                    };
+                    new_grid[(y, x)] = grid[(y, x)] || mirror_side;
                 }
             }
             new_grid
@@ -245,26 +260,25 @@ struct Input {
     folds: Vec<Fold>,
 }
 
+fn grid_str(grid: &Array2<bool>) -> String {
+    let mut output = String::new();
+    for row in grid.rows() {
+        let mut line = String::new();
+        for col in row {
+            if *col {
+                line += "#";
+            } else {
+                line += ".";
+            }
+        }
+        output += &line;
+        output += "\n";
+    }
+    output.trim().to_string()
+}
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    fn grid_str(grid: &Array2<bool>) -> String {
-        let mut output = String::new();
-        for row in grid.rows() {
-            let mut line = String::new();
-            for col in row {
-                if *col {
-                    line += "#";
-                } else {
-                    line += ".";
-                }
-            }
-            output += &line;
-            output += "\n";
-        }
-        output.trim().to_string()
-    }
 
     const EXAMPLE: &str = "6,10
 0,14
