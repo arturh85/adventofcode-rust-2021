@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>times</title>
+		<style>
+			/* PDF Specific */
+
+@media print {
+  body {
+    min-width: initial;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* General */
+
+.octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+.anchor {
+  float: left;
+  line-height: 1;
+  margin-left: -20px;
+  padding-right: 4px;
+}
+
+.anchor:focus {
+  outline: none;
+}
+
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+  color: #1b1f23;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+  text-decoration: none;
+}
+
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+h1:hover .anchor .octicon-link:before,
+h2:hover .anchor .octicon-link:before,
+h3:hover .anchor .octicon-link:before,
+h4:hover .anchor .octicon-link:before,
+h5:hover .anchor .octicon-link:before,
+h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' width='16' height='16' aria-hidden='true'%3E%3Cpath fill-rule='evenodd' d='M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+body {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-print-color-adjust: exact;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #24292e;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 1rem auto;
+}
+
+details {
+  display: block;
+}
+
+summary {
+  display: list-item;
+}
+
+a {
+  background-color: initial;
+}
+
+a:active,
+a:hover {
+  outline-width: 0;
+}
+
+strong {
+  font-weight: inherit;
+  font-weight: bolder;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+img {
+  border-style: none;
+}
+
+code,
+kbd,
+pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+hr {
+  box-sizing: initial;
+  height: 0;
+  overflow: visible;
+}
+
+input {
+  font: inherit;
+  margin: 0;
+}
+
+input {
+  overflow: visible;
+}
+
+[type='checkbox'] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+strong {
+  font-weight: 600;
+}
+
+hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #dfe2e5;
+}
+
+hr:after,
+hr:before {
+  display: table;
+  content: '';
+}
+
+hr:after {
+  clear: both;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+details summary {
+  cursor: pointer;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  line-height: 10px;
+  color: #444d56;
+  vertical-align: middle;
+  background-color: #fafbfc;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #d1d5da;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h1,
+h2 {
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h3,
+h4 {
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h5,
+h6 {
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+blockquote {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+ol ol,
+ul ol {
+  list-style-type: lower-roman;
+}
+
+ol ol ol,
+ol ul ol,
+ul ol ol,
+ul ul ol {
+  list-style-type: lower-alpha;
+}
+
+dd {
+  margin-left: 0;
+}
+
+code,
+pre {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 12px;
+}
+
+pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+:checked + .radio-label {
+  position: relative;
+  z-index: 1;
+  border-color: #0366d6;
+}
+
+.border {
+  border: 1px solid #e1e4e8 !important;
+}
+
+.border-0 {
+  border: 0 !important;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #e1e4e8 !important;
+}
+
+.rounded-1 {
+  border-radius: 3px !important;
+}
+
+.bg-white {
+  background-color: #fff !important;
+}
+
+.bg-gray-light {
+  background-color: #fafbfc !important;
+}
+
+.text-gray-light {
+  color: #6a737d !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.my-2 {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+.pl-0 {
+  padding-left: 0 !important;
+}
+
+.py-0 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.pl-1 {
+  padding-left: 4px !important;
+}
+
+.pl-2 {
+  padding-left: 8px !important;
+}
+
+.py-2 {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.pl-3,
+.px-3 {
+  padding-left: 16px !important;
+}
+
+.px-3 {
+  padding-right: 16px !important;
+}
+
+.pl-4 {
+  padding-left: 24px !important;
+}
+
+.pl-5 {
+  padding-left: 32px !important;
+}
+
+.pl-6 {
+  padding-left: 40px !important;
+}
+
+.f6 {
+  font-size: 12px !important;
+}
+
+.lh-condensed {
+  line-height: 1.25 !important;
+}
+
+.text-bold {
+  font-weight: 600 !important;
+}
+
+.pl-c {
+  color: #6a737d;
+}
+
+.pl-c1,
+.pl-s .pl-v {
+  color: #005cc5;
+}
+
+.pl-e,
+.pl-en {
+  color: #6f42c1;
+}
+
+.pl-s .pl-s1,
+.pl-smi {
+  color: #24292e;
+}
+
+.pl-ent {
+  color: #22863a;
+}
+
+.pl-k {
+  color: #d73a49;
+}
+
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+  color: #032f62;
+}
+
+.pl-smw,
+.pl-v {
+  color: #e36209;
+}
+
+.pl-bu {
+  color: #b31d28;
+}
+
+.pl-ii {
+  color: #fafbfc;
+  background-color: #b31d28;
+}
+
+.pl-c2 {
+  color: #fafbfc;
+  background-color: #d73a49;
+}
+
+.pl-c2:before {
+  content: '^M';
+}
+
+.pl-sr .pl-cce {
+  font-weight: 700;
+  color: #22863a;
+}
+
+.pl-ml {
+  color: #735c0f;
+}
+
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+  font-weight: 700;
+  color: #005cc5;
+}
+
+.pl-mi {
+  font-style: italic;
+  color: #24292e;
+}
+
+.pl-mb {
+  font-weight: 700;
+  color: #24292e;
+}
+
+.pl-md {
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+.pl-mi1 {
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.pl-mc {
+  color: #e36209;
+  background-color: #ffebda;
+}
+
+.pl-mi2 {
+  color: #f6f8fa;
+  background-color: #005cc5;
+}
+
+.pl-mdr {
+  font-weight: 700;
+  color: #6f42c1;
+}
+
+.pl-ba {
+  color: #586069;
+}
+
+.pl-sg {
+  color: #959da5;
+}
+
+.pl-corl {
+  text-decoration: underline;
+  color: #032f62;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.my-2 {
+  margin-bottom: 8px !important;
+}
+
+.my-2 {
+  margin-top: 8px !important;
+}
+
+.pl-0 {
+  padding-left: 0 !important;
+}
+
+.py-0 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.pl-1 {
+  padding-left: 4px !important;
+}
+
+.pl-2 {
+  padding-left: 8px !important;
+}
+
+.py-2 {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.pl-3 {
+  padding-left: 16px !important;
+}
+
+.pl-4 {
+  padding-left: 24px !important;
+}
+
+.pl-5 {
+  padding-left: 32px !important;
+}
+
+.pl-6 {
+  padding-left: 40px !important;
+}
+
+.pl-7 {
+  padding-left: 48px !important;
+}
+
+.pl-8 {
+  padding-left: 64px !important;
+}
+
+.pl-9 {
+  padding-left: 80px !important;
+}
+
+.pl-10 {
+  padding-left: 96px !important;
+}
+
+.pl-11 {
+  padding-left: 112px !important;
+}
+
+.pl-12 {
+  padding-left: 128px !important;
+}
+
+hr {
+  border-bottom-color: #eee;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  line-height: 10px;
+  color: #444d56;
+  vertical-align: middle;
+  background-color: #fafbfc;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #d1d5da;
+}
+
+body:after,
+body:before {
+  display: table;
+  content: '';
+}
+
+body:after {
+  clear: both;
+}
+
+body > :first-child {
+  margin-top: 0 !important;
+}
+
+body > :last-child {
+  margin-bottom: 0 !important;
+}
+
+a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+blockquote,
+details,
+dl,
+ol,
+p,
+pre,
+table,
+ul {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #e1e4e8;
+  border: 0;
+}
+
+blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h1,
+h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eaecef;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.25em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+h5 {
+  font-size: 0.875em;
+}
+
+h6 {
+  font-size: 0.85em;
+  color: #6a737d;
+}
+
+ol,
+ul {
+  padding-left: 2em;
+}
+
+ol ol,
+ol ul,
+ul ol,
+ul ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+li {
+  word-wrap: break-all;
+}
+
+li > p {
+  margin-top: 16px;
+}
+
+li + li {
+  margin-top: 0.25em;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+}
+
+table th {
+  font-weight: 600;
+}
+
+table td,
+table th {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+img {
+  max-width: 80%;
+  box-sizing: initial;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fff;
+}
+
+code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+}
+
+pre {
+  word-wrap: normal;
+}
+
+pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #333;
+  -webkit-print-color-adjust: exact;
+  background: #f8f8f8;
+}
+
+.hljs pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.hljs pre,
+pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  -webkit-print-color-adjust: exact;
+
+  border-radius: 3px;
+}
+
+pre code {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: initial;
+  border: 0;
+}
+
+.commit-tease-sha {
+  display: inline-block;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 90%;
+  color: #444d56;
+}
+
+.full-commit .btn-outline:not(:disabled):hover {
+  color: #005cc5;
+  border-color: #005cc5;
+}
+
+.blob-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.blob-wrapper-embedded {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.blob-num {
+  width: 1%;
+  min-width: 50px;
+  padding-right: 10px;
+  padding-left: 10px;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 12px;
+  line-height: 20px;
+  color: rgba(27, 31, 35, 0.3);
+  text-align: right;
+  white-space: nowrap;
+  vertical-align: top;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.blob-num:hover {
+  color: rgba(27, 31, 35, 0.6);
+}
+
+.blob-num:before {
+  content: attr(data-line-number);
+}
+
+.blob-code {
+  position: relative;
+  padding-right: 10px;
+  padding-left: 10px;
+  line-height: 20px;
+  vertical-align: top;
+}
+
+.blob-code-inner {
+  overflow: visible;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 12px;
+  color: #24292e;
+  word-wrap: normal;
+  white-space: pre;
+}
+
+.pl-token.active,
+.pl-token:hover {
+  cursor: pointer;
+  background: #ffea7f;
+}
+
+.tab-size[data-tab-size='1'] {
+  -moz-tab-size: 1;
+  tab-size: 1;
+}
+
+.tab-size[data-tab-size='2'] {
+  -moz-tab-size: 2;
+  tab-size: 2;
+}
+
+.tab-size[data-tab-size='3'] {
+  -moz-tab-size: 3;
+  tab-size: 3;
+}
+
+.tab-size[data-tab-size='4'] {
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+
+.tab-size[data-tab-size='5'] {
+  -moz-tab-size: 5;
+  tab-size: 5;
+}
+
+.tab-size[data-tab-size='6'] {
+  -moz-tab-size: 6;
+  tab-size: 6;
+}
+
+.tab-size[data-tab-size='7'] {
+  -moz-tab-size: 7;
+  tab-size: 7;
+}
+
+.tab-size[data-tab-size='8'] {
+  -moz-tab-size: 8;
+  tab-size: 8;
+}
+
+.tab-size[data-tab-size='9'] {
+  -moz-tab-size: 9;
+  tab-size: 9;
+}
+
+.tab-size[data-tab-size='10'] {
+  -moz-tab-size: 10;
+  tab-size: 10;
+}
+
+.tab-size[data-tab-size='11'] {
+  -moz-tab-size: 11;
+  tab-size: 11;
+}
+
+.tab-size[data-tab-size='12'] {
+  -moz-tab-size: 12;
+  tab-size: 12;
+}
+
+.task-list-item {
+  list-style-type: none;
+}
+
+.task-list-item + .task-list-item {
+  margin-top: 3px;
+}
+
+.task-list-item input {
+  margin: 0 0.2em 0.25em -1.6em;
+  vertical-align: middle;
+}
+/*
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+*/
+  
+  .hljs-comment,
+  .hljs-quote {
+    color: #998;
+    font-style: italic;
+  }
+  
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-subst {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .hljs-number,
+  .hljs-literal,
+  .hljs-variable,
+  .hljs-template-variable,
+  .hljs-tag .hljs-attr {
+    color: #008080;
+  }
+  
+  .hljs-string,
+  .hljs-doctag {
+    color: #d14;
+  }
+  
+  .hljs-title,
+  .hljs-section,
+  .hljs-selector-id {
+    color: #900;
+    font-weight: bold;
+  }
+  
+  .hljs-subst {
+    font-weight: normal;
+  }
+  
+  .hljs-type,
+  .hljs-class .hljs-title {
+    color: #458;
+    font-weight: bold;
+  }
+  
+  .hljs-tag,
+  .hljs-name,
+  .hljs-attribute {
+    color: #000080;
+    font-weight: normal;
+  }
+  
+  .hljs-regexp,
+  .hljs-link {
+    color: #009926;
+  }
+  
+  .hljs-symbol,
+  .hljs-bullet {
+    color: #990073;
+  }
+  
+  .hljs-built_in,
+  .hljs-builtin-name {
+    color: #0086b3;
+  }
+  
+  .hljs-meta {
+    color: #999;
+    font-weight: bold;
+  }
+  
+  .hljs-deletion {
+    background: #fdd;
+  }
+  
+  .hljs-addition {
+    background: #dfd;
+  }
+  
+  .hljs-emphasis {
+    font-style: italic;
+  }
+  
+  .hljs-strong {
+    font-weight: bold;
+  }
+		</style>
+	</head>
+	<body>
+		<nav id="table-of-contents">
+			
+		</nav>
+		<main>
+			<h1 id="execution-times-for-advent-of-code-2021" tabindex="-1"><a class="anchor" href="#execution-times-for-advent-of-code-2021" aria-hidden="true"><span class="octicon octicon-link"></span></a> Execution times for Advent of Code 2021</h1>
+<ul>
+<li>🎅 Solutions by <a href="https://github.com/arturh85">Artur Hallmann</a></li>
+<li>🔖 <a href="https://github.com/arturh85/adventofcode-rust-2021">Github Repository</a></li>
+<li>🚀 Benchmarked using <a href="https://github.com/features/actions">Github Actions</a></li>
+</ul>
+<h2 id="distribution-of-63791-ms" tabindex="-1"><a class="anchor" href="#distribution-of-63791-ms" aria-hidden="true"><span class="octicon octicon-link"></span></a> Distribution of 637.91 ms</h2>
+<p><img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22outlabeledPie%22%2C%22data%22%3A%7B%22labels%22%3A%5B%22Day%201.1%22%2C%22Day%201.2%22%2C%22Day%202.1%22%2C%22Day%202.2%22%2C%22Day%203.1%22%2C%22Day%203.2%22%2C%22Day%204.1%22%2C%22Day%204.2%22%2C%22Day%205.1%22%2C%22Day%205.2%22%2C%22Day%206.1%22%2C%22Day%206.2%22%2C%22Day%207.1%22%2C%22Day%207.2%22%2C%22Day%208.1%22%2C%22Day%208.2%22%2C%22Day%209.1%22%2C%22Day%209.2%22%2C%22Day%2010.1%22%2C%22Day%2010.2%22%2C%22Day%2011.1%22%2C%22Day%2011.2%22%2C%22Day%2012.1%22%2C%22Day%2013.1%22%2C%22Day%2013.2%22%2C%22Day%2014.1%22%2C%22Day%2014.2%22%2C%22Day%2015.1%22%2C%22Day%2015.2%22%5D%2C%22datasets%22%3A%5B%7B%22backgroundColor%22%3A%5B%22%23c42cb2%22%2C%22%23065535%22%2C%22%23000000%22%2C%22%23133337%22%2C%22%239d1e32%22%2C%22%23008080%22%2C%22%23ff0000%22%2C%22%23ffa500%22%2C%22%23ff7373%22%2C%22%2340e0d0%22%2C%22%230000ff%22%2C%22%23b0e0e6%22%2C%22%23d3ffce%22%2C%22%23666666%22%2C%22%23bada55%22%2C%22%23003366%22%2C%22%23fa8072%22%2C%22%23ffb6c1%22%2C%22%239b9a9a%22%2C%22%23800000%22%2C%22%23800080%22%2C%22%23c39797%22%2C%22%23f08080%22%2C%22%2300ff00%22%2C%22%23cccccc%22%2C%22%2320b2aa%22%2C%22%23333333%22%2C%22%23ffc3a0%22%2C%22%2366cdaa%22%5D%2C%22data%22%3A%5B54%2C69%2C139%2C139%2C342%2C111%2C312%2C410%2C2096%2C2637%2C8%2C8%2C282%2C578%2C891%2C1325%2C630%2C2867%2C107%2C123%2C790%2C1767%2C369896%2C5456%2C4888%2C10619%2C726%2C7210%2C223435%5D%7D%5D%7D%2C%22options%22%3A%7B%22plugins%22%3A%7B%22legend%22%3Afalse%2C%22outlabels%22%3A%7B%22text%22%3A%22%25l%20%25p%22%2C%22color%22%3A%22white%22%2C%22stretch%22%3A35%2C%22font%22%3A%7B%22resizable%22%3Atrue%2C%22minSize%22%3A12%2C%22maxSize%22%3A18%7D%7D%7D%7D%7D" alt="Pie Chart"></p>
+<h1 id="%F0%9F%93%85-day-1-sonar-sweep" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-1-sonar-sweep" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/1">Day 1: Sonar Sweep</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day1.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-1-part-1" tabindex="-1"><a class="anchor" href="#day-1-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 1 Part 1</h2>
+<h3 id="result-1292" tabindex="-1"><a class="anchor" href="#result-1292" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1292</h3>
+<ul>
+<li>
+<p>generator: 51.401µs</p>
+</li>
+<li>
+<p>runner: 1.5µs</p>
+</li>
+</ul>
+<h3 id="flame-graph" tabindex="-1"><a class="anchor" href="#flame-graph" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day1-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day1-1.svg" alt="Flame Graph Day 1 Part 1"></p>
+<h2 id="day-1-part-2" tabindex="-1"><a class="anchor" href="#day-1-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 1 Part 2</h2>
+<h3 id="result-1262" tabindex="-1"><a class="anchor" href="#result-1262" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1262</h3>
+<ul>
+<li>
+<p>generator: 53.201µs</p>
+</li>
+<li>
+<p>runner: 14.2µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-1" tabindex="-1"><a class="anchor" href="#flame-graph-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day1-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day1-2.svg" alt="Flame Graph Day 1 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-2-dive" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-2-dive" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/2">Day 2: Dive!</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day2.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-2-part-1" tabindex="-1"><a class="anchor" href="#day-2-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 2 Part 1</h2>
+<h3 id="result-1882980" tabindex="-1"><a class="anchor" href="#result-1882980" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1882980</h3>
+<ul>
+<li>
+<p>generator: 131.903µs</p>
+</li>
+<li>
+<p>runner: 7µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-2" tabindex="-1"><a class="anchor" href="#flame-graph-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day2-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day2-1.svg" alt="Flame Graph Day 2 Part 1"></p>
+<h2 id="day-2-part-2" tabindex="-1"><a class="anchor" href="#day-2-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 2 Part 2</h2>
+<h3 id="result-1971232560" tabindex="-1"><a class="anchor" href="#result-1971232560" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1971232560</h3>
+<ul>
+<li>
+<p>generator: 131.503µs</p>
+</li>
+<li>
+<p>runner: 6.6µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-3" tabindex="-1"><a class="anchor" href="#flame-graph-3" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day2-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day2-2.svg" alt="Flame Graph Day 2 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-3-binary-diagnostic" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-3-binary-diagnostic" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/3">Day 3: Binary Diagnostic</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day3.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-3-part-1" tabindex="-1"><a class="anchor" href="#day-3-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 3 Part 1</h2>
+<h3 id="result-3148794" tabindex="-1"><a class="anchor" href="#result-3148794" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 3148794</h3>
+<ul>
+<li>
+<p>generator: 46.701µs</p>
+</li>
+<li>
+<p>runner: 294.405µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-4" tabindex="-1"><a class="anchor" href="#flame-graph-4" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day3-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day3-1.svg" alt="Flame Graph Day 3 Part 1"></p>
+<h2 id="day-3-part-2" tabindex="-1"><a class="anchor" href="#day-3-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 3 Part 2</h2>
+<h3 id="result-2795310" tabindex="-1"><a class="anchor" href="#result-2795310" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 2795310</h3>
+<ul>
+<li>
+<p>generator: 43.701µs</p>
+</li>
+<li>
+<p>runner: 66.402µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-5" tabindex="-1"><a class="anchor" href="#flame-graph-5" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day3-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day3-2.svg" alt="Flame Graph Day 3 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-4-giant-squid" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-4-giant-squid" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/4">Day 4: Giant Squid</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day4.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-4-part-1" tabindex="-1"><a class="anchor" href="#day-4-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 4 Part 1</h2>
+<h3 id="result-41503" tabindex="-1"><a class="anchor" href="#result-41503" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 41503</h3>
+<ul>
+<li>
+<p>generator: 216.705µs</p>
+</li>
+<li>
+<p>runner: 94.802µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-6" tabindex="-1"><a class="anchor" href="#flame-graph-6" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day4-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day4-1.svg" alt="Flame Graph Day 4 Part 1"></p>
+<h2 id="day-4-part-2" tabindex="-1"><a class="anchor" href="#day-4-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 4 Part 2</h2>
+<h3 id="result-3178" tabindex="-1"><a class="anchor" href="#result-3178" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 3178</h3>
+<ul>
+<li>
+<p>generator: 174.704µs</p>
+</li>
+<li>
+<p>runner: 234.905µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-7" tabindex="-1"><a class="anchor" href="#flame-graph-7" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day4-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day4-2.svg" alt="Flame Graph Day 4 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-5-hydrothermal-venture" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-5-hydrothermal-venture" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/5">Day 5: Hydrothermal Venture</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day5.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-5-part-1" tabindex="-1"><a class="anchor" href="#day-5-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 5 Part 1</h2>
+<h3 id="result-7297" tabindex="-1"><a class="anchor" href="#result-7297" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 7297</h3>
+<ul>
+<li>
+<p>generator: 240.504µs</p>
+</li>
+<li>
+<p>runner: 1.854532ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-8" tabindex="-1"><a class="anchor" href="#flame-graph-8" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day5-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day5-1.svg" alt="Flame Graph Day 5 Part 1"></p>
+<h2 id="day-5-part-2" tabindex="-1"><a class="anchor" href="#day-5-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 5 Part 2</h2>
+<h3 id="result-21038" tabindex="-1"><a class="anchor" href="#result-21038" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 21038</h3>
+<ul>
+<li>
+<p>generator: 242.605µs</p>
+</li>
+<li>
+<p>runner: 2.393254ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-9" tabindex="-1"><a class="anchor" href="#flame-graph-9" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day5-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day5-2.svg" alt="Flame Graph Day 5 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-6-lanternfish" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-6-lanternfish" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/6">Day 6: Lanternfish</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day6.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-6-part-1" tabindex="-1"><a class="anchor" href="#day-6-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 6 Part 1</h2>
+<h3 id="result-352195" tabindex="-1"><a class="anchor" href="#result-352195" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 352195</h3>
+<ul>
+<li>
+<p>generator: 6.1µs</p>
+</li>
+<li>
+<p>runner: 400ns</p>
+</li>
+</ul>
+<h3 id="flame-graph-10" tabindex="-1"><a class="anchor" href="#flame-graph-10" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day6-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day6-1.svg" alt="Flame Graph Day 6 Part 1"></p>
+<h2 id="day-6-part-2" tabindex="-1"><a class="anchor" href="#day-6-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 6 Part 2</h2>
+<h3 id="result-1600306001288" tabindex="-1"><a class="anchor" href="#result-1600306001288" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1600306001288</h3>
+<ul>
+<li>
+<p>generator: 6.901µs</p>
+</li>
+<li>
+<p>runner: 600ns</p>
+</li>
+</ul>
+<h3 id="flame-graph-11" tabindex="-1"><a class="anchor" href="#flame-graph-11" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day6-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day6-2.svg" alt="Flame Graph Day 6 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-7-the-treachery-of-whales" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-7-the-treachery-of-whales" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/7">Day 7: The Treachery of Whales</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day7.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-7-part-1" tabindex="-1"><a class="anchor" href="#day-7-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 7 Part 1</h2>
+<h3 id="result-349812" tabindex="-1"><a class="anchor" href="#result-349812" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 349812</h3>
+<ul>
+<li>
+<p>generator: 34.101µs</p>
+</li>
+<li>
+<p>runner: 246.405µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-12" tabindex="-1"><a class="anchor" href="#flame-graph-12" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day7-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day7-1.svg" alt="Flame Graph Day 7 Part 1"></p>
+<h2 id="day-7-part-2" tabindex="-1"><a class="anchor" href="#day-7-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 7 Part 2</h2>
+<h3 id="result-99763899" tabindex="-1"><a class="anchor" href="#result-99763899" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 99763899</h3>
+<ul>
+<li>
+<p>generator: 33.601µs</p>
+</li>
+<li>
+<p>runner: 543.811µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-13" tabindex="-1"><a class="anchor" href="#flame-graph-13" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day7-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day7-2.svg" alt="Flame Graph Day 7 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-8-seven-segment-search" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-8-seven-segment-search" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/8">Day 8: Seven Segment Search</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day8.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-8-part-1" tabindex="-1"><a class="anchor" href="#day-8-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 8 Part 1</h2>
+<h3 id="result-495" tabindex="-1"><a class="anchor" href="#result-495" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 495</h3>
+<ul>
+<li>
+<p>generator: 884.518µs</p>
+</li>
+<li>
+<p>runner: 5.3µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-14" tabindex="-1"><a class="anchor" href="#flame-graph-14" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day8-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day8-1.svg" alt="Flame Graph Day 8 Part 1"></p>
+<h2 id="day-8-part-2" tabindex="-1"><a class="anchor" href="#day-8-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 8 Part 2</h2>
+<h3 id="result-1055164" tabindex="-1"><a class="anchor" href="#result-1055164" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1055164</h3>
+<ul>
+<li>
+<p>generator: 894.718µs</p>
+</li>
+<li>
+<p>runner: 429.609µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-15" tabindex="-1"><a class="anchor" href="#flame-graph-15" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day8-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day8-2.svg" alt="Flame Graph Day 8 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-9-smoke-basin" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-9-smoke-basin" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/9">Day 9: Smoke Basin</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day9.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-9-part-1" tabindex="-1"><a class="anchor" href="#day-9-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 9 Part 1</h2>
+<h3 id="result-478" tabindex="-1"><a class="anchor" href="#result-478" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 478</h3>
+<ul>
+<li>
+<p>generator: 227.905µs</p>
+</li>
+<li>
+<p>runner: 401.308µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-16" tabindex="-1"><a class="anchor" href="#flame-graph-16" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day9-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day9-1.svg" alt="Flame Graph Day 9 Part 1"></p>
+<h2 id="day-9-part-2" tabindex="-1"><a class="anchor" href="#day-9-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 9 Part 2</h2>
+<h3 id="result-1327014" tabindex="-1"><a class="anchor" href="#result-1327014" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1327014</h3>
+<ul>
+<li>
+<p>generator: 212.204µs</p>
+</li>
+<li>
+<p>runner: 2.653362ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-17" tabindex="-1"><a class="anchor" href="#flame-graph-17" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day9-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day9-2.svg" alt="Flame Graph Day 9 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-10-syntax-scoring" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-10-syntax-scoring" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/10">Day 10: Syntax Scoring</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day10.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-10-part-1" tabindex="-1"><a class="anchor" href="#day-10-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 10 Part 1</h2>
+<h3 id="result-392367" tabindex="-1"><a class="anchor" href="#result-392367" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 392367</h3>
+<ul>
+<li>
+<p>generator: 300ns</p>
+</li>
+<li>
+<p>runner: 105.302µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-18" tabindex="-1"><a class="anchor" href="#flame-graph-18" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day10-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day10-1.svg" alt="Flame Graph Day 10 Part 1"></p>
+<h2 id="day-10-part-2" tabindex="-1"><a class="anchor" href="#day-10-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 10 Part 2</h2>
+<h3 id="result-2192104158" tabindex="-1"><a class="anchor" href="#result-2192104158" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 2192104158</h3>
+<ul>
+<li>
+<p>generator: 300ns</p>
+</li>
+<li>
+<p>runner: 121.603µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-19" tabindex="-1"><a class="anchor" href="#flame-graph-19" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day10-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day10-2.svg" alt="Flame Graph Day 10 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-11-dumbo-octopus" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-11-dumbo-octopus" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/11">Day 11: Dumbo Octopus</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day11.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-11-part-1" tabindex="-1"><a class="anchor" href="#day-11-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 11 Part 1</h2>
+<h3 id="result-1755" tabindex="-1"><a class="anchor" href="#result-1755" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 1755</h3>
+<ul>
+<li>
+<p>generator: 6.7µs</p>
+</li>
+<li>
+<p>runner: 782.016µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-20" tabindex="-1"><a class="anchor" href="#flame-graph-20" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day11-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day11-1.svg" alt="Flame Graph Day 11 Part 1"></p>
+<h2 id="day-11-part-2" tabindex="-1"><a class="anchor" href="#day-11-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 11 Part 2</h2>
+<h3 id="result-212" tabindex="-1"><a class="anchor" href="#result-212" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 212</h3>
+<ul>
+<li>
+<p>generator: 5.4µs</p>
+</li>
+<li>
+<p>runner: 1.760936ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-21" tabindex="-1"><a class="anchor" href="#flame-graph-21" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day11-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day11-2.svg" alt="Flame Graph Day 11 Part 2"></p>
+<h1 id="%F0%9F%93%85-day-12-passage-pathing" tabindex="-1"><a class="anchor" href="#%F0%9F%93%85-day-12-passage-pathing" aria-hidden="true"><span class="octicon octicon-link"></span></a> 📅 <a href="https://adventofcode.com/2021/day/12">Day 12: Passage Pathing</a></h1>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day12.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-12-part-1" tabindex="-1"><a class="anchor" href="#day-12-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 12 Part 1</h2>
+<h3 id="result-3463" tabindex="-1"><a class="anchor" href="#result-3463" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 3463</h3>
+<ul>
+<li>
+<p>generator: 27.3µs</p>
+</li>
+<li>
+<p>runner: 369.8679ms</p>
+</li>
+<li>
+<p>🤯 Flame Graph generation took longer than three minutes.<br>
+//! <a href="https://adventofcode.com/2021/day/13">Day 13: Transparent Origami</a></p>
+</li>
+<li>
+<p><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day13.rs">Solution Source</a></p>
+</li>
+</ul>
+<h2 id="day-13-part-1" tabindex="-1"><a class="anchor" href="#day-13-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 13 Part 1</h2>
+<h3 id="result-847" tabindex="-1"><a class="anchor" href="#result-847" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 847</h3>
+<ul>
+<li>
+<p>generator: 1.151423ms</p>
+</li>
+<li>
+<p>runner: 4.303287ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-22" tabindex="-1"><a class="anchor" href="#flame-graph-22" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day13-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day13-1.svg" alt="Flame Graph Day 13 Part 1"></p>
+<h2 id="day-13-part-2" tabindex="-1"><a class="anchor" href="#day-13-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 13 Part 2</h2>
+<p>###...##..####.###...##..####..##..###..<br>
+#..#.#..#....#.#..#.#..#.#....#..#.#..#.<br>
+###..#......#..#..#.#....###..#..#.###..<br>
+#..#.#.....#...###..#....#....####.#..#.<br>
+#..#.#..#.#....#.#..#..#.#....#..#.#..#.<br>
+###...##..####.#..#..##..####.#..#.###..</p>
+<h3 id="result-bczrceab" tabindex="-1"><a class="anchor" href="#result-bczrceab" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : BCZRCEAB</h3>
+<ul>
+<li>
+<p>generator: 1.122422ms</p>
+</li>
+<li>
+<p>runner: 3.764077ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-23" tabindex="-1"><a class="anchor" href="#flame-graph-23" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day13-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day13-2.svg" alt="Flame Graph Day 13 Part 2"><br>
+//! <a href="https://adventofcode.com/2021/day/14">Day 14: Extended Polymerization</a></p>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day14.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-14-part-1" tabindex="-1"><a class="anchor" href="#day-14-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 14 Part 1</h2>
+<h3 id="result-2233" tabindex="-1"><a class="anchor" href="#result-2233" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 2233</h3>
+<ul>
+<li>
+<p>generator: 23.201µs</p>
+</li>
+<li>
+<p>runner: 10.594736ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-24" tabindex="-1"><a class="anchor" href="#flame-graph-24" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day14-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day14-1.svg" alt="Flame Graph Day 14 Part 1"></p>
+<h2 id="day-14-part-2" tabindex="-1"><a class="anchor" href="#day-14-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 14 Part 2</h2>
+<h3 id="result-2884513602164" tabindex="-1"><a class="anchor" href="#result-2884513602164" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 2884513602164</h3>
+<ul>
+<li>
+<p>generator: 24.4µs</p>
+</li>
+<li>
+<p>runner: 700.414µs</p>
+</li>
+</ul>
+<h3 id="flame-graph-25" tabindex="-1"><a class="anchor" href="#flame-graph-25" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day14-2.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day14-2.svg" alt="Flame Graph Day 14 Part 2"><br>
+//! <a href="">Day 15: Chiton</a></p>
+<ul>
+<li><a href="https://github.com/arturh85/adventofcode-rust-2021/blob/master/src/day15.rs">Solution Source</a></li>
+</ul>
+<h2 id="day-15-part-1" tabindex="-1"><a class="anchor" href="#day-15-part-1" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 15 Part 1</h2>
+<h3 id="result-363" tabindex="-1"><a class="anchor" href="#result-363" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 363</h3>
+<ul>
+<li>
+<p>generator: 269.006µs</p>
+</li>
+<li>
+<p>runner: 6.93944ms</p>
+</li>
+</ul>
+<h3 id="flame-graph-26" tabindex="-1"><a class="anchor" href="#flame-graph-26" aria-hidden="true"><span class="octicon octicon-link"></span></a> <a href="flamegraph-day15-1.svg">Flame Graph</a>:</h3>
+<p><img src="./flamegraph-day15-1.svg" alt="Flame Graph Day 15 Part 1"></p>
+<h2 id="day-15-part-2" tabindex="-1"><a class="anchor" href="#day-15-part-2" aria-hidden="true"><span class="octicon octicon-link"></span></a> Day 15 Part 2</h2>
+<h3 id="result-2835" tabindex="-1"><a class="anchor" href="#result-2835" aria-hidden="true"><span class="octicon octicon-link"></span></a> Result : 2835</h3>
+<ul>
+<li>
+<p>generator: 270.506µs</p>
+</li>
+<li>
+<p>runner: 223.163509ms</p>
+</li>
+<li>
+<p>🤯 Flame Graph generation took longer than three minutes.</p>
+</li>
+</ul>
+
+		</main>
+	</body>
+</html>

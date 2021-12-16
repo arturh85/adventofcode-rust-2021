@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 7: The Treachery of Whales"><meta name="keywords" content="rust, rustlang, rust-lang, day7"><title>adventofcode_rust_2021::day7 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day7</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day7" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day7</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day7.rs.html#1-158" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-7-the-treachery-of-whales" class="section-header"><a href="#day-7-the-treachery-of-whales">Day 7: The Treachery of Whales</a></h2>
+<p>A giant <a href="https://en.wikipedia.org/wiki/Sperm_whale">whale</a> has decided your submarine is its
+next meal, and it’s much faster than you are. There’s nowhere to run!</p>
+<p>Suddenly, a swarm of crabs (each in its own tiny submarine - it’s too deep for them otherwise)
+zooms in to rescue you! They seem to be preparing to blast a hole in the ocean floor; sensors
+indicate a massive underground cave system just beyond where they’re aiming!</p>
+<p>The crab submarines all need to be aligned before they’ll have enough power to blast a large
+enough hole for your submarine to get through. However, it doesn’t look like they’ll be aligned
+before the whale catches you! Maybe you can help?</p>
+<p>There’s one major catch - crab submarines can only move horizontally.</p>
+<p>You quickly make a list of the horizontal position of each crab (your puzzle input). Crab
+submarines have limited fuel, so you need to find a way to make all of their horizontal
+positions match while requiring them to spend as little fuel as possible.</p>
+<p>For example, consider the following horizontal positions:</p>
+<div class="example-wrap"><pre class="language-plain"><code>16,1,2,0,4,2,7,1,2,14</code></pre></div>
+<p>This means there’s a crab with horizontal position <code>16</code>, a crab with horizontal position <code>1</code>,
+and so on.</p>
+<p>Each change of 1 step in horizontal position of a single crab costs 1 fuel. You could choose
+any horizontal position to align them all on, but the one that costs the least fuel is
+horizontal position <code>2</code>:</p>
+<ul>
+<li>Move from <code>16</code> to <code>2</code>: <code>14</code> fuel</li>
+<li>Move from <code>1</code> to <code>2</code>: <code>1</code> fuel</li>
+<li>Move from <code>2</code> to <code>2</code>: <code>0</code> fuel</li>
+<li>Move from <code>0</code> to <code>2</code>: <code>2</code> fuel</li>
+<li>Move from <code>4</code> to <code>2</code>: <code>2</code> fuel</li>
+<li>Move from <code>2</code> to <code>2</code>: <code>0</code> fuel</li>
+<li>Move from <code>7</code> to <code>2</code>: <code>5</code> fuel</li>
+<li>Move from <code>1</code> to <code>2</code>: <code>1</code> fuel</li>
+<li>Move from <code>2</code> to <code>2</code>: <code>0</code> fuel</li>
+<li>Move from <code>14</code> to <code>2</code>: <code>12</code> fuel</li>
+</ul>
+<p>This costs a total of <code>37</code> fuel. This is the cheapest possible outcome; more expensive
+outcomes include aligning at position <code>1</code> (<code>41</code> fuel), position <code>3</code> (<code>39</code> fuel), or position
+<code>10</code> (<code>71</code> fuel).</p>
+<p>Determine the horizontal position that the crabs can align to using the least fuel possible.
+<strong>How much fuel must they spend to align to that position?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The crabs don’t seem interested in your proposed solution.
+Perhaps you misunderstand crab engineering?</p>
+<p>As it turns out, crab submarine engines don’t burn fuel at a constant rate. Instead, each
+change of 1 step in horizontal position costs 1 more unit of fuel than the last: the first step
+costs <code>1</code>, the second step costs <code>2</code>, the third step costs <code>3</code>, and so on.</p>
+<p>As each crab moves, moving further becomes more expensive. This changes the best horizontal
+position to align them all on; in the example above, this becomes <code>5</code>:</p>
+<ul>
+<li>Move from <code>16</code> to <code>5</code>: <code>66</code> fuel</li>
+<li>Move from <code>1</code> to <code>5</code>: <code>10</code> fuel</li>
+<li>Move from <code>2</code> to <code>5</code>: <code>6</code> fuel</li>
+<li>Move from <code>0</code> to <code>5</code>: <code>15</code> fuel</li>
+<li>Move from <code>4</code> to <code>5</code>: <code>1</code> fuel</li>
+<li>Move from <code>2</code> to <code>5</code>: <code>6</code> fuel</li>
+<li>Move from <code>7</code> to <code>5</code>: <code>3</code> fuel</li>
+<li>Move from <code>1</code> to <code>5</code>: <code>10</code> fuel</li>
+<li>Move from <code>2</code> to <code>5</code>: <code>6</code> fuel</li>
+<li>Move from <code>14</code> to <code>5</code>: <code>45</code> fuel</li>
+</ul>
+<p>This costs a total of <code>168</code> fuel. This is the new cheapest possible outcome;
+the old alignment position (<code>2</code>) now costs <code>206</code> fuel instead.</p>
+<p>Determine the horizontal position that the crabs can align to using the least fuel possible so
+they can make you an escape route!</p>
+<p><strong>How much fuel must they spend to align to that position?</strong></p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day7_part1/index.html" title="adventofcode_rust_2021::day7::day7_part1 mod">day7_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day7_part2/index.html" title="adventofcode_rust_2021::day7::day7_part2 mod">day7_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.abs_diff.html" title="adventofcode_rust_2021::day7::abs_diff fn">abs_diff</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.fuel1.html" title="adventofcode_rust_2021::day7::fuel1 fn">fuel1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.fuel2.html" title="adventofcode_rust_2021::day7::fuel2 fn">fuel2</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day7::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day7::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1:
+Determine the horizontal position that the crabs can align to using the least fuel possible.
+How much fuel must they spend to align to that position?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day7::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2:
+Determine the horizontal position that the crabs can align to using the least fuel possible so
+they can make you an escape route!
+How much fuel must they spend to align to that position?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.triangle_number.html" title="adventofcode_rust_2021::day7::triangle_number fn">triangle_number</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

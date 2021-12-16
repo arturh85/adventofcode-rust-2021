@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parse_input",""],["part1","Part 1: What is the lowest total risk of any path from the top left to the bottom right?"],["part2","Part 2: Using the full map, what is the lowest total risk of any path from the top left to the bottom right?"]],"mod":[["day15_part1",""],["day15_part2",""]]});

@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 5: Hydrothermal Venture"><meta name="keywords" content="rust, rustlang, rust-lang, day5"><title>adventofcode_rust_2021::day5 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day5</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day5" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day5</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day5.rs.html#1-253" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-5-hydrothermal-venture" class="section-header"><a href="#day-5-hydrothermal-venture">Day 5: Hydrothermal Venture</a></h2>
+<p>You come across a field of <a href="https://en.wikipedia.org/wiki/Hydrothermal_vent">hydrothermal vents</a>
+on the ocean floor! These vents constantly produce large, opaque clouds, so it would be best to
+avoid them if possible.</p>
+<p>They tend to form in lines; the submarine helpfully produces a list of nearby lines of vents
+(your puzzle input) for you to review. For example:</p>
+<div class="example-wrap"><pre class="language-plain"><code>0,9 -&gt; 5,9
+8,0 -&gt; 0,8
+9,4 -&gt; 3,4
+2,2 -&gt; 2,1
+7,0 -&gt; 7,4
+6,4 -&gt; 2,0
+0,9 -&gt; 2,9
+3,4 -&gt; 1,4
+0,0 -&gt; 8,8
+5,5 -&gt; 8,2
+</code></pre></div>
+<p>Each line of vents is given as a line segment in the format <code>x1,y1 -&gt; x2,y2</code> where <code>x1</code>,<code>y1</code>
+are the coordinates of one end the line segment and <code>x2</code>,<code>y2</code> are the coordinates of the
+other end. These line segments include the points at both ends. In other words:</p>
+<ul>
+<li>An entry like <code>1,1 -&gt; 1,3</code> covers points <code>1,1</code>, <code>1,2</code>, and <code>1,3</code>.</li>
+<li>An entry like <code>9,7 -&gt; 7,7</code> covers points <code>9,7</code>, <code>8,7</code>, and <code>7,7</code>.</li>
+</ul>
+<p>For now, only consider horizontal and vertical lines: lines where either <code>x1 = x2</code> or <code>y1 = y2</code>.</p>
+<p>So, the horizontal and vertical lines from the above list would produce the following diagram:</p>
+<div class="example-wrap"><pre class="language-plain"><code>.......1..
+..1....1..
+..1....1..
+.......1..
+.112111211
+..........
+..........
+..........
+..........
+222111....
+</code></pre></div>
+<p>In this diagram, the top left corner is <code>0,0</code> and the bottom right corner is <code>9,9</code>.
+Each position is shown as the number of lines which cover that point or <code>.</code> if no line
+covers that point. The top-left pair of <code>1</code>s, for example, comes from <code>2,2 -&gt; 2,1</code>; the
+very bottom row is formed by the overlapping lines <code>0,9 -&gt; 5,9</code> and <code>0,9 -&gt; 2,9</code>.</p>
+<p>To avoid the most dangerous areas, you need to determine the number of points where at least
+two lines overlap. In the above example, this is anywhere in the diagram with a <code>2</code> or
+larger - a total of <code>5</code> points.</p>
+<p>Consider only horizontal and vertical lines. <strong>At how many points do at least two lines overlap?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Unfortunately, considering only horizontal and vertical lines doesn’t give you the
+full picture; you need to also consider diagonal lines.</p>
+<p>Because of the limits of the hydrothermal vent mapping system, the lines in your list will
+only ever be horizontal, vertical, or a diagonal line at exactly 45 degrees. In other words:</p>
+<ul>
+<li>An entry like <code>1,1 -&gt; 3,3</code> covers points <code>1,1</code>, <code>2,2</code>, and <code>3,3</code>.</li>
+<li>An entry like <code>9,7 -&gt; 7,9</code> covers points <code>9,7</code>, <code>8,8</code>, and <code>7,9</code>.</li>
+</ul>
+<p>Considering all lines from the above example would now produce the following diagram:</p>
+<div class="example-wrap"><pre class="language-plain"><code>1.1....11.
+.111...2..
+..2.1.111.
+...1.2.2..
+.112313211
+...1.2....
+..1...1...
+.1.....1..
+1.......1.
+222111....</code></pre></div>
+<p>You still need to determine the number of points where at least two lines overlap.
+In the above example, this is still anywhere in the diagram with a <code>2</code> or larger - now a
+total of <code>12</code> points.</p>
+<p>Consider all of the lines. <strong>At how many points do at least two lines overlap?</strong></p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day5_part1/index.html" title="adventofcode_rust_2021::day5::day5_part1 mod">day5_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day5_part2/index.html" title="adventofcode_rust_2021::day5::day5_part2 mod">day5_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Line.html" title="adventofcode_rust_2021::day5::Line struct">Line</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Point.html" title="adventofcode_rust_2021::day5::Point struct">Point</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.build_grid.html" title="adventofcode_rust_2021::day5::build_grid fn">build_grid</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.grid_size.html" title="adventofcode_rust_2021::day5::grid_size fn">grid_size</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day5::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day5::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: At how many points do at least two lines overlap?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day5::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: At how many points do at least two lines overlap?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.range.html" title="adventofcode_rust_2021::day5::range fn">range</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

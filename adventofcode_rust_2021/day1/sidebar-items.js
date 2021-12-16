@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["count_increases","Counts how many values in collection increase compared to previous"],["parse_input",""],["part1","Part 1: How many measurements are larger than the previous measurement?"],["part2","Part 2: How many sums are larger than the previous sum?"]],"mod":[["day1_part1",""],["day1_part2",""]]});

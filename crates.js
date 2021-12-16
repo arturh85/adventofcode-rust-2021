@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["adventofcode_rust_2021"];

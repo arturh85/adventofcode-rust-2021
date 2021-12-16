@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["explore_basin",""],["find_basins",""],["find_low_points",""],["parse_input",""],["part1","Part 1: What is the sum of the risk levels of all low points on your heightmap?"],["part2","Part 2: What do you get if you multiply together the sizes of the three largest basins?"]],"mod":[["day9_part1",""],["day9_part2",""]]});

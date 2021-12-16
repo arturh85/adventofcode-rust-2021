@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 3: Binary Diagnostic"><meta name="keywords" content="rust, rustlang, rust-lang, day3"><title>adventofcode_rust_2021::day3 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day3</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day3" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day3</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day3.rs.html#1-296" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-3-binary-diagnostic" class="section-header"><a href="#day-3-binary-diagnostic">Day 3: Binary Diagnostic</a></h2>
+<p>The submarine has been making some odd creaking noises, so you ask it to produce a
+diagnostic report just in case.</p>
+<p>The diagnostic report (your puzzle input) consists of a list of binary numbers which,
+when decoded properly, can tell you many useful things about the conditions of the submarine.
+The first parameter to check is the power consumption.</p>
+<p>You need to use the binary numbers in the diagnostic report to generate two new binary numbers
+(called the gamma rate and the epsilon rate).
+The power consumption can then be found by multiplying the gamma rate by the epsilon rate.</p>
+<p>Each bit in the gamma rate can be determined by finding the most common bit in the
+corresponding position of all numbers in the diagnostic report. For example,
+given the following diagnostic report:</p>
+<div class="example-wrap"><pre class="language-plain"><code>00100
+11110
+10110
+10111
+10101
+01111
+00111
+11100
+10000
+11001
+00010
+01010</code></pre></div>
+<p>Considering only the first bit of each number, there are five <code>0</code> bits and seven <code>1</code> bits.
+Since the most common bit is <code>1</code>, the first bit of the gamma rate is <code>1</code>.</p>
+<p>The most common second bit of the numbers in the diagnostic report is <code>0</code>,
+so the second bit of the gamma rate is <code>0</code>.</p>
+<p>The most common value of the third, fourth, and fifth bits are <code>1</code>, <code>1</code>, and <code>0</code>,
+respectively, and so the final three bits of the gamma rate are <code>110</code>.</p>
+<p>So, the gamma rate is the binary number <code>10110</code>, or <code>22</code> in decimal.</p>
+<p>The epsilon rate is calculated in a similar way; rather than use the most common bit,
+the least common bit from each position is used. So, the epsilon rate is <code>01001</code>,
+or <code>9</code> in decimal. Multiplying the gamma rate (<code>22</code>) by the epsilon rate (<code>9</code>)
+produces the power consumption, <code>198</code>.</p>
+<p>Use the binary numbers in your diagnostic report to calculate the gamma rate and epsilon rate,
+then multiply them together.</p>
+<p><strong>What is the power consumption of the submarine?</strong></p>
+<p>(Be sure to represent your answer in decimal, not binary.)</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Next, you should verify the life support rating, which can be determined by multiplying the
+oxygen generator rating by the CO2 scrubber rating.</p>
+<p>Both the oxygen generator rating and the CO2 scrubber rating are values that can be found in
+your diagnostic report - finding them is the tricky part. Both values are located using a
+similar process that involves filtering out values until only one remains. Before searching
+for either rating value, start with the full list of binary numbers from your diagnostic report
+and consider just the first bit of those numbers. Then:</p>
+<ul>
+<li>Keep only numbers selected by the bit criteria for the type of rating value for which you
+are searching. Discard numbers which do not match the bit criteria.</li>
+<li>If you only have one number left, stop; this is the rating value for which you
+are searching.</li>
+<li>Otherwise, repeat the process, considering the next bit to the right.</li>
+</ul>
+<p>The bit criteria depends on which type of rating value you want to find:</p>
+<ul>
+<li>To find oxygen generator rating, determine the most common value (<code>0</code> or <code>1</code>) in the
+current bit position, and keep only numbers with that bit in that position. If <code>0</code> and <code>1</code>
+are equally common, keep values with a <code>1</code> in the position being considered.</li>
+<li>To find CO2 scrubber rating, determine the least common value (<code>0</code> or <code>1</code>) in the current
+bit position, and keep only numbers with that bit in that position. If <code>0</code> and <code>1</code> are equally
+common, keep values with a <code>0</code> in the position being considered.</li>
+</ul>
+<p>For example, to determine the oxygen generator rating value using the same example
+diagnostic report from above:</p>
+<ul>
+<li>Start with all 12 numbers and consider only the first bit of each number.
+There are more <code>1</code> bits (7) than <code>0</code> bits (5), so keep only the 7 numbers with a <code>1</code> in
+the first position: <code>11110</code>, <code>10110</code>, <code>10111</code>, <code>10101</code>, <code>11100</code>, <code>10000</code>, and <code>11001</code>.</li>
+<li>Then, consider the second bit of the 7 remaining numbers: there are more <code>0</code> bits (4)
+than <code>1</code> bits (3), so keep only the 4 numbers with a <code>0</code> in the second position:
+<code>10110</code>, <code>10111</code>, <code>10101</code>, and <code>10000</code>.</li>
+<li>In the third position, three of the four numbers have a <code>1</code>, so keep those three:
+<code>10110</code>, <code>10111</code>, and <code>10101</code>.</li>
+<li>In the fourth position, two of the three numbers have a <code>1</code>, so keep those two:
+<code>10110</code> and <code>10111</code>.</li>
+<li>In the fifth position, there are an equal number of <code>0</code> bits and <code>1</code> bits (one each).
+So, to find the oxygen generator rating, keep the number with a <code>1</code> in that position:
+<code>10111</code>.</li>
+<li>As there is only one number left, stop;
+the oxygen generator rating is <code>10111</code>, or <code>23</code> in decimal.</li>
+</ul>
+<p>Then, to determine the CO2 scrubber rating value from the same example above:</p>
+<ul>
+<li>Start again with all 12 numbers and consider only the first bit of each number.
+There are fewer <code>0</code> bits (5) than <code>1</code> bits (7), so keep only the 5 numbers with a <code>0</code>
+in the first position:
+<code>00100</code>, <code>01111</code>, <code>00111</code>, <code>00010</code>, and <code>01010</code>.</li>
+<li>Then, consider the second bit of the 5 remaining numbers: there are fewer <code>1</code> bits (2)
+than <code>0</code> bits (3), so keep only the 2 numbers with a <code>1</code> in the second position:
+<code>01111</code> and <code>01010</code>.</li>
+<li>In the third position, there are an equal number of <code>0</code> bits and <code>1</code> bits (one each).
+So, to find the CO2 scrubber rating, keep the number with a <code>0</code> in that position: <code>01010</code>.</li>
+<li>As there is only one number left, stop; the CO2 scrubber rating is <code>01010</code>,
+or <code>10</code> in decimal.</li>
+</ul>
+<p>Finally, to find the life support rating, multiply the oxygen generator rating (<code>23</code>) by the
+CO2 scrubber rating (<code>10</code>) to get <code>230</code>.</p>
+<p>Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and
+CO2 scrubber rating, then multiply them together.</p>
+<p><strong>What is the life support rating of the submarine?</strong></p>
+<p>(Be sure to represent your answer in decimal, not binary.)</p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day3_part1/index.html" title="adventofcode_rust_2021::day3::day3_part1 mod">day3_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day3_part2/index.html" title="adventofcode_rust_2021::day3::day3_part2 mod">day3_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.co2.html" title="adventofcode_rust_2021::day3::co2 fn">co2</a></div><div class="item-right docblock-short"><p>To find CO2 scrubber rating, determine the least common value (<code>0</code> or <code>1</code>) in the current
+bit position, and keep only numbers with that bit in that position. If <code>0</code> and <code>1</code> are equally
+common, keep values with a <code>0</code> in the position being considered.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.count_ones_zeros_at.html" title="adventofcode_rust_2021::day3::count_ones_zeros_at fn">count_ones_zeros_at</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.epsilon.html" title="adventofcode_rust_2021::day3::epsilon fn">epsilon</a></div><div class="item-right docblock-short"><p>The epsilon rate is calculated in a similar way; rather than use the most common bit,
+the least common bit from each position is used.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.gamma.html" title="adventofcode_rust_2021::day3::gamma fn">gamma</a></div><div class="item-right docblock-short"><p>The gamma rate is calculated by using the least common bit from each position.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.oxygen.html" title="adventofcode_rust_2021::day3::oxygen fn">oxygen</a></div><div class="item-right docblock-short"><p>To find oxygen generator rating, determine the most common value (<code>0</code> or <code>1</code>) in the
+current bit position, and keep only numbers with that bit in that position. If <code>0</code> and <code>1</code>
+are equally common, keep values with a <code>1</code> in the position being considered.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day3::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day3::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1:
+Use the binary numbers in your diagnostic report to calculate the gamma rate and epsilon rate,
+then multiply them together.
+What is the power consumption of the submarine?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day3::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2:
+What is the life support rating of the submarine?
+Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and
+CO2 scrubber rating, then multiply them together.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.significant_bitcount.html" title="adventofcode_rust_2021::day3::significant_bitcount fn">significant_bitcount</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

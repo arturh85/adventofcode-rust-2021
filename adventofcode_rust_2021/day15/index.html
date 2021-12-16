@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 15: Chiton"><meta name="keywords" content="rust, rustlang, rust-lang, day15"><title>adventofcode_rust_2021::day15 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day15</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day15" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day15</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day15.rs.html#1-266" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><a href="">Day 15: Chiton</a></p>
+<p>You’ve almost reached the exit of the cave, but the walls are getting closer together.
+Your submarine can barely still fit, though; the main problem is that the walls of the cave
+are covered in <a href="https://en.wikipedia.org/wiki/Chiton">chitons</a>, and it would be best not
+to bump any of them.</p>
+<p>The cavern is large, but has a very low ceiling, restricting your motion to two dimensions.
+The shape of the cavern resembles a square; a quick scan of chiton density produces a map of risk level throughout the cave (your puzzle input). For example:</p>
+<div class="example-wrap"><pre class="language-plain"><code>1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581</code></pre></div>
+<p>You start in the top left position, your destination is the bottom right position, and you
+cannot move diagonally. The number at each position is its risk level; to determine the total
+risk of an entire path, add up the risk levels of each position you enter (that is, don’t count
+the risk level of your starting position unless you enter it; leaving it adds no risk to
+your total).</p>
+<p>Your goal is to find a path with the lowest total risk. In this example, a path with the
+lowest total risk is highlighted here:</p>
+<div class="example-wrap"><pre class="language-plain"><code>1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581</code></pre></div>
+<p>The total risk of this path is <code>40</code> (the starting position is never entered,
+so its risk is not counted).</p>
+<p><strong>What is the lowest total risk of any path from the top left to the bottom right?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Now that you know how to find low-risk paths in the cave, you can try to find your way out.</p>
+<p>The entire cave is actually five times larger in both dimensions than you thought; the area you
+originally scanned is just one tile in a 5x5 tile area that forms the full map. Your original
+map tile repeats to the right and downward; each time the tile repeats to the right or
+downward, all of its risk levels are 1 higher than the tile immediately up or left of it.
+However, risk levels above <code>9</code> wrap back around to <code>1</code>. So, if your original map had some
+position with a risk level of <code>8</code>, then that same position on each of the 25 total tiles would
+be as follows:</p>
+<div class="example-wrap"><pre class="language-plain"><code>8 9 1 2 3
+9 1 2 3 4
+1 2 3 4 5
+2 3 4 5 6
+3 4 5 6 7
+</code></pre></div>
+<p>Each single digit above corresponds to the example position with a value of <code>8</code> on the top-left
+tile. Because the full map is actually five times larger in both dimensions, that position
+appears a total of 25 times, once in each duplicated tile, with the values shown above.</p>
+<p>Here is the full five-times-as-large version of the first example above, with the original
+map in the top left corner highlighted:</p>
+<div class="example-wrap"><pre class="language-plain"><code>11637517422274862853338597396444961841755517295286
+13813736722492484783351359589446246169155735727126
+21365113283247622439435873354154698446526571955763
+36949315694715142671582625378269373648937148475914
+74634171118574528222968563933317967414442817852555
+13191281372421239248353234135946434524615754563572
+13599124212461123532357223464346833457545794456865
+31254216394236532741534764385264587549637569865174
+12931385212314249632342535174345364628545647573965
+23119445813422155692453326671356443778246755488935
+22748628533385973964449618417555172952866628316397
+24924847833513595894462461691557357271266846838237
+32476224394358733541546984465265719557637682166874
+47151426715826253782693736489371484759148259586125
+85745282229685639333179674144428178525553928963666
+24212392483532341359464345246157545635726865674683
+24611235323572234643468334575457944568656815567976
+42365327415347643852645875496375698651748671976285
+23142496323425351743453646285456475739656758684176
+34221556924533266713564437782467554889357866599146
+33859739644496184175551729528666283163977739427418
+35135958944624616915573572712668468382377957949348
+43587335415469844652657195576376821668748793277985
+58262537826937364893714847591482595861259361697236
+96856393331796741444281785255539289636664139174777
+35323413594643452461575456357268656746837976785794
+35722346434683345754579445686568155679767926678187
+53476438526458754963756986517486719762859782187396
+34253517434536462854564757396567586841767869795287
+45332667135644377824675548893578665991468977611257
+44961841755517295286662831639777394274188841538529
+46246169155735727126684683823779579493488168151459
+54698446526571955763768216687487932779859814388196
+69373648937148475914825958612593616972361472718347
+17967414442817852555392896366641391747775241285888
+46434524615754563572686567468379767857948187896815
+46833457545794456865681556797679266781878137789298
+64587549637569865174867197628597821873961893298417
+45364628545647573965675868417678697952878971816398
+56443778246755488935786659914689776112579188722368
+55172952866628316397773942741888415385299952649631
+57357271266846838237795794934881681514599279262561
+65719557637682166874879327798598143881961925499217
+71484759148259586125936169723614727183472583829458
+28178525553928963666413917477752412858886352396999
+57545635726865674683797678579481878968159298917926
+57944568656815567976792667818781377892989248891319
+75698651748671976285978218739618932984172914319528
+56475739656758684176786979528789718163989182927419
+67554889357866599146897761125791887223681299833479</code></pre></div>
+<p>Equipped with the full map, you can now find a path from the top left corner to the bottom
+right corner with the lowest total risk:</p>
+<div class="example-wrap"><pre class="language-plain"><code>11637517422274862853338597396444961841755517295286
+13813736722492484783351359589446246169155735727126
+21365113283247622439435873354154698446526571955763
+36949315694715142671582625378269373648937148475914
+74634171118574528222968563933317967414442817852555
+13191281372421239248353234135946434524615754563572
+13599124212461123532357223464346833457545794456865
+31254216394236532741534764385264587549637569865174
+12931385212314249632342535174345364628545647573965
+23119445813422155692453326671356443778246755488935
+22748628533385973964449618417555172952866628316397
+24924847833513595894462461691557357271266846838237
+32476224394358733541546984465265719557637682166874
+47151426715826253782693736489371484759148259586125
+85745282229685639333179674144428178525553928963666
+24212392483532341359464345246157545635726865674683
+24611235323572234643468334575457944568656815567976
+42365327415347643852645875496375698651748671976285
+23142496323425351743453646285456475739656758684176
+34221556924533266713564437782467554889357866599146
+33859739644496184175551729528666283163977739427418
+35135958944624616915573572712668468382377957949348
+43587335415469844652657195576376821668748793277985
+58262537826937364893714847591482595861259361697236
+96856393331796741444281785255539289636664139174777
+35323413594643452461575456357268656746837976785794
+35722346434683345754579445686568155679767926678187
+53476438526458754963756986517486719762859782187396
+34253517434536462854564757396567586841767869795287
+45332667135644377824675548893578665991468977611257
+44961841755517295286662831639777394274188841538529
+46246169155735727126684683823779579493488168151459
+54698446526571955763768216687487932779859814388196
+69373648937148475914825958612593616972361472718347
+17967414442817852555392896366641391747775241285888
+46434524615754563572686567468379767857948187896815
+46833457545794456865681556797679266781878137789298
+64587549637569865174867197628597821873961893298417
+45364628545647573965675868417678697952878971816398
+56443778246755488935786659914689776112579188722368
+55172952866628316397773942741888415385299952649631
+57357271266846838237795794934881681514599279262561
+65719557637682166874879327798598143881961925499217
+71484759148259586125936169723614727183472583829458
+28178525553928963666413917477752412858886352396999
+57545635726865674683797678579481878968159298917926
+57944568656815567976792667818781377892989248891319
+75698651748671976285978218739618932984172914319528
+56475739656758684176786979528789718163989182927419
+67554889357866599146897761125791887223681299833479</code></pre></div>
+<p>The total risk of this path is <code>315</code> (the starting position is still never entered,
+so its risk is not counted).</p>
+<p><strong>Using the full map, what is the lowest total risk of any path from the top left to the bottom right?</strong></p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day15_part1/index.html" title="adventofcode_rust_2021::day15::day15_part1 mod">day15_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day15_part2/index.html" title="adventofcode_rust_2021::day15::day15_part2 mod">day15_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day15::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day15::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the lowest total risk of any path from the top left to the bottom right?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day15::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: Using the full map, what is the lowest total risk of any path from the
+top left to the bottom right?</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

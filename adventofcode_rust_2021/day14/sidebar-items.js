@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["evolve1",""],["evolve2",""],["map_char_frequences",""],["parse_input",""],["part1","Part 1: What do you get if you take the quantity of the most common element and subtract the quantity of the least common element?"],["part2","Part 2"]],"mod":[["day14_part1",""],["day14_part2",""]],"struct":[["Polymer",""]]});

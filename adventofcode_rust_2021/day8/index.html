@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 8: Seven Segment Search"><meta name="keywords" content="rust, rustlang, rust-lang, day8"><title>adventofcode_rust_2021::day8 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day8</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day8" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day8</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day8.rs.html#1-347" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-8-seven-segment-search" class="section-header"><a href="#day-8-seven-segment-search">Day 8: Seven Segment Search</a></h2>
+<p>You barely reach the safety of the cave when the whale smashes into the cave mouth,
+collapsing it. Sensors indicate another exit to this cave at a much greater depth,
+so you have no choice but to press on.</p>
+<p>As your submarine slowly makes its way through the cave system, you notice that the
+four-digit <a href="https://en.wikipedia.org/wiki/Seven-segment_display">seven-segment displays</a> in
+your submarine are malfunctioning; they must have been damaged during the escape. You’ll be in a
+lot of trouble without them, so you’d better figure out what’s wrong.</p>
+<p>Each digit of a seven-segment display is rendered by turning on or off any of seven segments
+named <code>a</code> through <code>g</code>:</p>
+<div class="example-wrap"><pre class="language-plain"><code>  0:      1:      2:      3:      4:
+ aaaa    ....    aaaa    aaaa    ....
+b    c  .    c  .    c  .    c  b    c
+b    c  .    c  .    c  .    c  b    c
+ ....    ....    dddd    dddd    dddd
+e    f  .    f  e    .  .    f  .    f
+e    f  .    f  e    .  .    f  .    f
+ gggg    ....    gggg    gggg    ....
+
+  5:      6:      7:      8:      9:
+ aaaa    aaaa    aaaa    aaaa    aaaa
+b    .  b    .  .    c  b    c  b    c
+b    .  b    .  .    c  b    c  b    c
+ dddd    dddd    ....    dddd    dddd
+.    f  e    f  .    f  e    f  .    f
+.    f  e    f  .    f  e    f  .    f
+ gggg    gggg    ....    gggg    gggg</code></pre></div>
+<p>So, to render a <code>1</code>, only segments <code>c</code> and <code>f</code> would be turned on; the rest would be off.
+To render a <code>7</code>, only segments <code>a</code>, <code>c</code>, and <code>f</code> would be turned on.</p>
+<p>The problem is that the signals which control the segments have been mixed up on each display.
+The submarine is still trying to display numbers by producing output on signal wires <code>a</code>
+through <code>g</code>, but those wires are connected to segments randomly. Worse, the wire/segment
+connections are mixed up separately for each four-digit display! (All of the digits within a
+display use the same connections, though.)</p>
+<p>So, you might know that only signal wires <code>b</code> and <code>g</code> are turned on, but that doesn’t mean
+egments <code>b</code> and <code>g</code> are turned on: the only digit that uses two segments is <code>1</code>, so it must
+mean segments <code>c</code> and <code>f</code> are meant to be on. With just that information, you still can’t tell
+which wire (<code>b</code>/<code>g</code>) goes to which segment (<code>c</code>/<code>f</code>). For that, you’ll need to collect
+more information.</p>
+<p>For each display, you watch the changing signals for a while, make a note of all ten unique
+signal patterns you see, and then write down a single four digit output value
+(your puzzle input). Using the signal patterns, you should be able to work out
+which pattern corresponds to which digit.</p>
+<p>For example, here is what you might see in a single entry in your notes:</p>
+<div class="example-wrap"><pre class="language-plain"><code>acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab |
+cdfeb fcadb cdfeb cdbaf</code></pre></div>
+<p>(The entry is wrapped here to two lines so it fits; in your notes,
+it will all be on a single line.)</p>
+<p>Each entry consists of ten unique signal patterns, a <code>|</code> delimiter, and finally the four digit
+output value. Within an entry, the same wire/segment connections are used (but you don’t know
+what the connections actually are). The unique signal patterns correspond to the ten different
+ways the submarine tries to render a digit using the current wire/segment connections.
+Because <code>7</code> is the only digit that uses three segments, <code>dab</code> in the above example means that
+to render a <code>7</code>, signal lines <code>d</code>, <code>a</code>, and <code>b</code> are on. Because <code>4</code> is the only digit that uses
+four segments, <code>eafb</code> means that to render a <code>4</code>, signal lines <code>e</code>, <code>a</code>, <code>f</code>, and <code>b</code> are on.</p>
+<p>Using this information, you should be able to work out which combination of signal wires
+corresponds to each of the ten digits. Then, you can decode the four digit output value.
+Unfortunately, in the above example, all of the digits in the output
+value (<code>cdfeb fcadb cdfeb cdbaf</code>) use five segments and are more difficult to deduce.</p>
+<p>For now, focus on the easy digits. Consider this larger example:</p>
+<div class="example-wrap"><pre class="language-plain"><code>be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb |
+fdgacbe cefdb cefbgd gcbe
+edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec |
+fcgedb cgb dgebacf gc
+fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef |
+cg cg fdcagb cbg
+fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega |
+efabcd cedba gadfec cb
+aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga |
+gecf egdcabf bgf bfgea
+fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf |
+gebdcfa ecba ca fadegcb
+dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf |
+cefg dcbef fcge gbcadfe
+bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd |
+ed bcgafe cdgba cbgef
+egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg |
+gbdfcae bgc cg cgb
+gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |
+fgae cfgab fg bagce
+</code></pre></div>
+<p>Because the digits <code>1</code>, <code>4</code>, <code>7</code>, and <code>8</code> each use a unique number of segments, you should be
+able to tell which combinations of signals correspond to those digits. Counting only digits in
+the output values (the part after <code>|</code> on each line), in the above example, there are <code>26</code>
+instances of digits that use a unique number of segments (highlighted above).</p>
+<p><strong>In the output values, how many times do digits <code>1</code>, <code>4</code>, <code>7</code>, or <code>8</code> appear</strong>?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Through a little deduction, you should now be able to determine the remaining digits.
+Consider again the first example above:</p>
+<div class="example-wrap"><pre class="language-plain"><code>acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab |
+cdfeb fcadb cdfeb cdbaf</code></pre></div>
+<p>After some careful analysis, the mapping between signal wires and segments only make sense in the following configuration:</p>
+<div class="example-wrap"><pre class="language-plain"><code> dddd
+e    a
+e    a
+ ffff
+g    b
+g    b
+ cccc
+</code></pre></div>
+<p>So, the unique signal patterns would correspond to the following digits:</p>
+<ul>
+<li><code>acedgfb</code>: <code>8</code></li>
+<li><code>cdfbe</code>: <code>5</code></li>
+<li><code>gcdfa</code>: <code>2</code></li>
+<li><code>fbcad</code>: <code>3</code></li>
+<li><code>dab</code>: <code>7</code></li>
+<li><code>cefabd</code>: <code>9</code></li>
+<li><code>cdfgeb</code>: <code>6</code></li>
+<li><code>eafb</code>: <code>4</code></li>
+<li><code>cagedb</code>: <code>0</code></li>
+<li><code>ab</code>: <code>1</code></li>
+</ul>
+<p>Then, the four digits of the output value can be decoded:</p>
+<ul>
+<li><code>cdfeb</code>: <code>5</code></li>
+<li><code>fcadb</code>: <code>3</code></li>
+<li><code>cdfeb</code>: <code>5</code></li>
+<li><code>cdbaf</code>: <code>3</code></li>
+</ul>
+<p>Therefore, the output value for this entry is <code>5353</code>.</p>
+<p>Following this same process for each entry in the second, larger example above, the output value of each entry can be determined:</p>
+<ul>
+<li><code>fdgacbe cefdb cefbgd gcbe</code>: <code>8394</code></li>
+<li><code>fcgedb cgb dgebacf gc</code>: <code>9781</code></li>
+<li><code>cg cg fdcagb cbg</code>: <code>1197</code></li>
+<li><code>efabcd cedba gadfec cb</code>: <code>9361</code></li>
+<li><code>gecf egdcabf bgf bfgea</code>: <code>4873</code></li>
+<li><code>gebdcfa ecba ca fadegcb</code>: <code>8418</code></li>
+<li><code>cefg dcbef fcge gbcadfe</code>: <code>4548</code></li>
+<li><code>ed bcgafe cdgba cbgef</code>: <code>1625</code></li>
+<li><code>gbdfcae bgc cg cgb</code>: <code>8717</code></li>
+<li><code>fgae cfgab fg bagce</code>: <code>4315</code></li>
+</ul>
+<p>Adding all of the output values in this larger example produces <code>61229</code>.</p>
+<p>For each entry, determine all of the wire/segment connections and decode the
+four-digit output values. <strong>What do you get if you add up all of the output values?</strong></p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day8_part1/index.html" title="adventofcode_rust_2021::day8::day8_part1 mod">day8_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day8_part2/index.html" title="adventofcode_rust_2021::day8::day8_part2 mod">day8_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.build_map.html" title="adventofcode_rust_2021::day8::build_map fn">build_map</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.decode.html" title="adventofcode_rust_2021::day8::decode fn">decode</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day8::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day8::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: In the output values, how many times do digits <code>1</code>, <code>4</code>, <code>7</code>, or <code>8</code> appear?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day8::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: What do you get if you add up all of the output values?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.sort.html" title="adventofcode_rust_2021::day8::sort fn">sort</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.string_contains_chars.html" title="adventofcode_rust_2021::day8::string_contains_chars fn">string_contains_chars</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

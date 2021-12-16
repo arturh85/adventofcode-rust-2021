@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["build_map",""],["decode",""],["parse_input",""],["part1","Part 1: In the output values, how many times do digits `1`, `4`, `7`, or `8` appear?"],["part2","Part 2: What do you get if you add up all of the output values?"],["sort",""],["string_contains_chars",""]],"mod":[["day8_part1",""],["day8_part2",""]]});

@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 14: Extended Polymerization"><meta name="keywords" content="rust, rustlang, rust-lang, day14"><title>adventofcode_rust_2021::day14 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day14</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day14" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day14</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day14.rs.html#1-259" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><a href="https://adventofcode.com/2021/day/14">Day 14: Extended Polymerization</a></p>
+<p>The incredible pressures at this depth are starting to put a strain on your submarine.
+The submarine has <a href="https://en.wikipedia.org/wiki/Polymerization">polymerization</a> equipment that
+would produce suitable materials to reinforce the submarine, and the nearby volcanically-active
+caves should even have the necessary input elements in sufficient quantities.</p>
+<p>The submarine manual contains instructions for finding the optimal polymer formula;
+specifically, it offers a polymer template and a list of pair insertion rules
+(your puzzle input). You just need to work out what polymer would result after repeating the
+pair insertion process a few times.</p>
+<p>For example:</p>
+<div class="example-wrap"><pre class="language-plain"><code>NNCB
+
+CH -&gt; B
+HH -&gt; N
+CB -&gt; H
+NH -&gt; C
+HB -&gt; C
+HC -&gt; B
+HN -&gt; C
+NN -&gt; C
+BH -&gt; H
+NC -&gt; B
+NB -&gt; B
+BN -&gt; B
+BB -&gt; N
+BC -&gt; B
+CC -&gt; N
+CN -&gt; C</code></pre></div>
+<p>The first line is the polymer template - this is the starting point of the process.</p>
+<p>The following section defines the pair insertion rules. A rule like <code>AB -&gt; C</code> means that when
+elements <code>A</code> and <code>B</code> are immediately adjacent, element <code>C</code> should be inserted between them.
+These insertions all happen simultaneously.</p>
+<p>So, starting with the polymer template <code>NNCB</code>, the first step simultaneously considers
+all three pairs:</p>
+<ul>
+<li>The first pair (<code>NN</code>) matches the rule <code>NN -&gt; C</code>, so element <code>C</code> is inserted
+between the first <code>N</code> and the second <code>N</code>.</li>
+<li>The second pair (<code>NC</code>) matches the rule <code>NC -&gt; B</code>, so element <code>B</code> is inserted
+between the <code>N</code> and the <code>C</code>.</li>
+<li>The third pair (<code>CB</code>) matches the rule <code>CB -&gt; H</code>, so element <code>H</code> is inserted
+between the <code>C</code> and the <code>B</code>.</li>
+</ul>
+<p>Note that these pairs overlap: the second element of one pair is the first element of the
+next pair. Also, because all pairs are considered simultaneously, inserted elements are not
+considered to be part of a pair until the next step.</p>
+<p>After the first step of this process, the polymer becomes <code>NCNBCHB</code>.</p>
+<p>Here are the results of a few steps using the above rules:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Template:     NNCB
+After step 1: NCNBCHB
+After step 2: NBCCNBBBCBHCB
+After step 3: NBBBCNCCNBBNBNBBCHBHHBCHB
+After step 4: NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB
+</code></pre></div>
+<p>This polymer grows quickly. After step 5, it has length 97; After step 10, it has length 3073.
+After step 10, <code>B</code> occurs 1749 times, <code>C</code> occurs 298 times, <code>H</code> occurs 161 times, and <code>N</code>
+occurs 865 times; taking the quantity of the most common element (<code>B</code>, 1749) and subtracting the
+quantity of the least common element (<code>H</code>, 161) produces <code>1749 - 161 = 1588</code>.</p>
+<p>Apply 10 steps of pair insertion to the polymer template and find the most and least common
+elements in the result.
+<strong>What do you get if you take the quantity of the most common element and subtract the quantity
+of the least common element?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The resulting polymer isn’t nearly strong enough to reinforce the submarine. You’ll need to run
+more steps of the pair insertion process; a total of 40 steps should do it.</p>
+<p>In the above example, the most common element is <code>B</code> (occurring <code>2192039569602</code> times) and the
+least common element is <code>H</code> (occurring <code>3849876073</code> times); subtracting
+these produces <code>2188189693529</code>.</p>
+<p>Apply 40 steps of pair insertion to the polymer template and find the most and least common
+elements in the result. What do you get if you take the quantity of the most common
+element and subtract the quantity of the least common element?</p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day14_part1/index.html" title="adventofcode_rust_2021::day14::day14_part1 mod">day14_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day14_part2/index.html" title="adventofcode_rust_2021::day14::day14_part2 mod">day14_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Polymer.html" title="adventofcode_rust_2021::day14::Polymer struct">Polymer</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.evolve1.html" title="adventofcode_rust_2021::day14::evolve1 fn">evolve1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.evolve2.html" title="adventofcode_rust_2021::day14::evolve2 fn">evolve2</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.map_char_frequences.html" title="adventofcode_rust_2021::day14::map_char_frequences fn">map_char_frequences</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day14::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day14::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What do you get if you take the quantity of the most common element and subtract the
+quantity of the least common element?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day14::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

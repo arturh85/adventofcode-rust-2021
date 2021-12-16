@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["array2_to_graph4","converts given Array2 to a Graph"],["get_neighbors4","gets 4 neighbor positions of given pos in grid"],["get_neighbors8","gets 8 neighbor positions of given pos in grid"],["parse_array2","parses ascii based grids into Array2"],["shape2","shape of given array2 as tuple"]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["build_grid",""],["grid_size",""],["parse_input",""],["part1","Part 1: At how many points do at least two lines overlap?"],["part2","Part 2: At how many points do at least two lines overlap?"],["range",""]],"mod":[["day5_part1",""],["day5_part2",""]],"struct":[["Line",""],["Point",""]]});

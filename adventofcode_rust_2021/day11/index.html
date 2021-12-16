@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 11: Dumbo Octopus"><meta name="keywords" content="rust, rustlang, rust-lang, day11"><title>adventofcode_rust_2021::day11 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../adventofcode_rust_2021/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module day11</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="day11" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2021</a>::<wbr><a class="mod" href="#">day11</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/adventofcode_rust_2021/day11.rs.html#1-828" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-11-dumbo-octopus" class="section-header"><a href="#day-11-dumbo-octopus">Day 11: Dumbo Octopus</a></h2>
+<p>You enter a large cavern full of rare bioluminescent
+<a href="https://www.youtube.com/watch?v=eih-VSaS2g0">dumbo octopuses</a>! They seem to not like the
+Christmas lights on your submarine, so you turn them off for now.</p>
+<p>There are 100 octopuses arranged neatly in a 10 by 10 grid. Each octopus slowly gains energy
+over time and flashes brightly for a moment when its energy is full. Although your lights are
+off, maybe you could navigate through the cave without disturbing the octopuses if you could
+predict when the flashes of light will happen.</p>
+<p>Each octopus has an energy level - your submarine can remotely measure the energy level of each
+octopus (your puzzle input). For example:</p>
+<div class="example-wrap"><pre class="language-plain"><code>5483143223
+2745854711
+5264556173
+6141336146
+6357385478
+4167524645
+2176841721
+6882881134
+4846848554
+5283751526</code></pre></div>
+<p>The energy level of each octopus is a value between <code>0</code> and <code>9</code>. Here, the top-left octopus has
+an energy level of <code>5</code>, the bottom-right one has an energy level of <code>6</code>, and so on.</p>
+<p>You can model the energy levels and flashes of light in steps. During a single step, the
+following occurs:</p>
+<ul>
+<li>First, the energy level of each octopus increases by <code>1</code>.</li>
+<li>Then, any octopus with an energy level greater than <code>9</code> flashes. This increases the
+energy level of all adjacent octopuses by <code>1</code>, including octopuses that are diagonally
+adjacent. If this causes an octopus to have an energy level greater than <code>9</code>, it also
+flashes. This process continues as long as new octopuses keep having their energy level
+increased beyond <code>9</code>. (An octopus can only flash at most once per step.)</li>
+<li>Finally, any octopus that flashed during this step has its energy level set to <code>0</code>,
+as it used all of its energy to flash.</li>
+</ul>
+<p>Adjacent flashes can cause an octopus to flash on a step even if it begins that step with
+very little energy. Consider the middle octopus with <code>1</code> energy in this situation:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Before any steps:
+11111
+19991
+19191
+19991
+11111
+
+After step 1:
+34543
+40004
+50005
+40004
+34543
+
+After step 2:
+45654
+51115
+61116
+51115
+45654</code></pre></div>
+<p>An octopus is highlighted when it flashed during the given step.</p>
+<p>Here is how the larger example above progresses:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Before any steps:
+5483143223
+2745854711
+5264556173
+6141336146
+6357385478
+4167524645
+2176841721
+6882881134
+4846848554
+5283751526
+
+After step 1:
+6594254334
+3856965822
+6375667284
+7252447257
+7468496589
+5278635756
+3287952832
+7993992245
+5957959665
+6394862637
+
+After step 2:
+8807476555
+5089087054
+8597889608
+8485769600
+8700908800
+6600088989
+6800005943
+0000007456
+9000000876
+8700006848
+
+After step 3:
+0050900866
+8500800575
+9900000039
+9700000041
+9935080063
+7712300000
+7911250009
+2211130000
+0421125000
+0021119000
+
+After step 4:
+2263031977
+0923031697
+0032221150
+0041111163
+0076191174
+0053411122
+0042361120
+5532241122
+1532247211
+1132230211
+
+After step 5:
+4484144000
+2044144000
+2253333493
+1152333274
+1187303285
+1164633233
+1153472231
+6643352233
+2643358322
+2243341322
+
+After step 6:
+5595255111
+3155255222
+3364444605
+2263444496
+2298414396
+2275744344
+2264583342
+7754463344
+3754469433
+3354452433
+
+After step 7:
+6707366222
+4377366333
+4475555827
+3496655709
+3500625609
+3509955566
+3486694453
+8865585555
+4865580644
+4465574644
+
+After step 8:
+7818477333
+5488477444
+5697666949
+4608766830
+4734946730
+4740097688
+6900007564
+0000009666
+8000004755
+6800007755
+
+After step 9:
+9060000644
+7800000976
+6900000080
+5840000082
+5858000093
+6962400000
+8021250009
+2221130009
+9111128097
+7911119976
+
+After step 10:
+0481112976
+0031112009
+0041112504
+0081111406
+0099111306
+0093511233
+0442361130
+5532252350
+0532250600
+0032240000</code></pre></div>
+<p>After step 10, there have been a total of <code>204</code> flashes. Fast forwarding, here is the same
+configuration every 10 steps:</p>
+<div class="example-wrap"><pre class="language-plain"><code>After step 20:
+3936556452
+5686556806
+4496555690
+4448655580
+4456865570
+5680086577
+7000009896
+0000000344
+6000000364
+4600009543
+
+After step 30:
+0643334118
+4253334611
+3374333458
+2225333337
+2229333338
+2276733333
+2754574565
+5544458511
+9444447111
+7944446119
+
+After step 40:
+6211111981
+0421111119
+0042111115
+0003111115
+0003111116
+0065611111
+0532351111
+3322234597
+2222222976
+2222222762
+
+After step 50:
+9655556447
+4865556805
+4486555690
+4458655580
+4574865570
+5700086566
+6000009887
+8000000533
+6800000633
+5680000538
+
+After step 60:
+2533334200
+2743334640
+2264333458
+2225333337
+2225333338
+2287833333
+3854573455
+1854458611
+1175447111
+1115446111
+
+After step 70:
+8211111164
+0421111166
+0042111114
+0004211115
+0000211116
+0065611111
+0532351111
+7322235117
+5722223475
+4572222754
+
+After step 80:
+1755555697
+5965555609
+4486555680
+4458655580
+4570865570
+5700086566
+7000008666
+0000000990
+0000000800
+0000000000
+
+After step 90:
+7433333522
+2643333522
+2264333458
+2226433337
+2222433338
+2287833333
+2854573333
+4854458333
+3387779333
+3333333333
+
+After step 100:
+0397666866
+0749766918
+0053976933
+0004297822
+0004229892
+0053222877
+0532222966
+9322228966
+7922286866
+6789998766
+
+After 100 steps, there have been a total of 1656 flashes.
+Given the starting energy levels of the dumbo octopuses in your cavern, simulate 100 steps.
+
+**How many total flashes are there after 100 steps?**
+
+
+It seems like the individual flashes aren&#39;t bright enough to navigate.
+However, you might have a better option: the flashes seem to be synchronizing!
+
+In the example above, the first time all octopuses flash simultaneously is step `195`:
+
+```plain
+After step 193:
+5877777777
+8877777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+
+After step 194:
+6988888888
+9988888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+
+After step 195:
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000</code></pre></div>
+<p>If you can calculate the exact moments when the octopuses will all flash simultaneously,
+you should be able to navigate through the cavern.</p>
+<p><strong>What is the first step during which all octopuses flash?</strong></p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day11_part1/index.html" title="adventofcode_rust_2021::day11::day11_part1 mod">day11_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day11_part2/index.html" title="adventofcode_rust_2021::day11::day11_part2 mod">day11_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.evolve.html" title="adventofcode_rust_2021::day11::evolve fn">evolve</a></div><div class="item-right docblock-short"><p>You can model the energy levels and flashes of light in steps. During a single step,
+the following occurs:</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2021::day11::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2021::day11::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: Given the starting energy levels of the dumbo octopuses in your cavern,
+simulate 100 steps. How many total flashes are there after 100 steps?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2021::day11::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: What is the first step during which all octopuses flash?</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2021" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

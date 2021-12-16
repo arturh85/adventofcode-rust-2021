@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["evolve",""],["parse_input",""],["part1","Part 1: How many lanternfish would there be after 80 days?"],["part2","Part 2: How many lanternfish would there be after 256 days?"]],"mod":[["day6_part1",""],["day6_part2",""]]});
