@@ -81,14 +81,14 @@
 
 #[aoc_generator(day7)]
 fn parse_input(input: &str) -> Vec<u32> {
-    input.split(",").map(|line| line.parse().unwrap()).collect()
+    input.split(',').map(|line| line.parse().unwrap()).collect()
 }
 
 /// Part 1:
 /// Determine the horizontal position that the crabs can align to using the least fuel possible.
 /// How much fuel must they spend to align to that position?
 #[aoc(day7, part1)]
-fn part1(input: &Vec<u32>) -> u32 {
+fn part1(input: &[u32]) -> u32 {
     (0..input.len())
         .map(|target| fuel1(input, target as u32))
         .min()
@@ -100,14 +100,14 @@ fn part1(input: &Vec<u32>) -> u32 {
 /// they can make you an escape route!
 /// How much fuel must they spend to align to that position?
 #[aoc(day7, part2)]
-fn part2(input: &Vec<u32>) -> u32 {
+fn part2(input: &[u32]) -> u32 {
     (0..input.len())
         .map(|target| fuel2(input, target as u32))
         .min()
         .unwrap()
 }
 
-fn fuel1(input: &Vec<u32>, target: u32) -> u32 {
+fn fuel1(input: &[u32], target: u32) -> u32 {
     let mut fuel = 0;
     for v in input {
         fuel += abs_diff(*v, target);
@@ -115,7 +115,7 @@ fn fuel1(input: &Vec<u32>, target: u32) -> u32 {
     fuel
 }
 
-fn fuel2(input: &Vec<u32>, target: u32) -> u32 {
+fn fuel2(input: &[u32], target: u32) -> u32 {
     let mut fuel = 0;
     for v in input {
         fuel += triangle_number(abs_diff(*v, target));

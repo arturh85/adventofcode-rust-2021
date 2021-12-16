@@ -93,14 +93,13 @@ use grid::Grid;
 
 #[aoc_generator(day5)]
 fn parse_input(input: &str) -> Vec<Line> {
-    input.lines().map(|line| Line::parse(line)).collect()
+    input.lines().map(Line::parse).collect()
 }
 
 /// Part 1: At how many points do at least two lines overlap?
 #[aoc(day5, part1)]
-fn part1(input: &Vec<Line>) -> usize {
-    let non_diagonals: Vec<Line> = input
-        .clone()
+fn part1(input: &[Line]) -> usize {
+    let non_diagonals: Vec<Line> = Vec::from(input)
         .into_iter()
         .filter(|line| !line.is_diagonal())
         .collect();
@@ -110,7 +109,7 @@ fn part1(input: &Vec<Line>) -> usize {
 
 /// Part 2: At how many points do at least two lines overlap?
 #[aoc(day5, part2)]
-fn part2(input: &Vec<Line>) -> usize {
+fn part2(input: &[Line]) -> usize {
     let grid = build_grid(input);
     grid.iter().filter(|v| **v >= 2).count()
 }

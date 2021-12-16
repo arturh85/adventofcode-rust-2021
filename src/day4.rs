@@ -105,7 +105,7 @@ fn parse_input(input: &str) -> BingoGame {
     const FOOTER_LINES: usize = 1;
     for (nr, line) in input.lines().enumerate() {
         if nr == 0 {
-            numbers = line.split(",").map(|c| c.parse().unwrap()).collect();
+            numbers = line.split(',').map(|c| c.parse().unwrap()).collect();
         } else if nr >= HEADER_LINES {
             buffer += &*line.replace("  ", " ").trim();
             buffer += "\n";
@@ -148,7 +148,7 @@ impl BingoBoard {
             if line.is_empty() {
                 break;
             }
-            for (x, value) in line.split(" ").enumerate() {
+            for (x, value) in line.split(' ').enumerate() {
                 values[y][x] = value.parse().unwrap();
             }
         }
@@ -232,10 +232,8 @@ impl BingoGame {
                     }
                 }
             }
-            let mut offset = 0;
-            for idx in idx_to_remove {
+            for (offset, idx) in idx_to_remove.into_iter().enumerate() {
                 boards.remove(idx - offset);
-                offset += 1;
             }
         }
         None

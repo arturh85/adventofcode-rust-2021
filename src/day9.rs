@@ -96,59 +96,37 @@
 //!
 //! **What do you get if you multiply together the sizes of the three largest basins?**
 
+use crate::util::{get_neighbors4, parse_array2};
+use ndarray::Array2;
+
 #[aoc_generator(day9)]
-fn parse_input(input: &str) -> Vec<Vec<u8>> {
-    input
-        .lines()
-        .map(|line| {
-            line.chars()
-                .map(|c| c.to_string().parse().unwrap())
-                .collect()
-        })
-        .collect()
+fn parse_input(input: &str) -> Array2<u8> {
+    parse_array2(input)
 }
 
 /// Part 1: What is the sum of the risk levels of all low points on your heightmap?
 #[aoc(day9, part1)]
-fn part1(input: &Vec<Vec<u8>>) -> u64 {
-    find_low_points(input).iter().sum()
+fn part1(grid: &Array2<u8>) -> u64 {
+    find_low_points(grid).iter().sum()
 }
 
 /// Part 2: What do you get if you multiply together the sizes of the three largest basins?
 #[aoc(day9, part2)]
-fn part2(input: &Vec<Vec<u8>>) -> u64 {
-    let mut basins = find_basins(input);
-    basins.sort();
+fn part2(grid: &Array2<u8>) -> u64 {
+    let mut basins = find_basins(grid);
+    basins.sort_unstable();
     basins.reverse();
     basins[0..3].iter().product()
 }
 
-fn get_neighbors(heightmap: &Vec<Vec<u8>>, pos: &(usize, usize)) -> Vec<(usize, usize)> {
-    let mut list = Vec::new();
-    if pos.0 > 0 {
-        list.push((pos.0 - 1, pos.1));
-    }
-    if pos.1 > 0 {
-        list.push((pos.0, pos.1 - 1));
-    }
-    if pos.0 < heightmap.len() - 1 {
-        list.push((pos.0 + 1, pos.1));
-    }
-    if pos.1 < heightmap[0].len() - 1 {
-        list.push((pos.0, pos.1 + 1));
-    }
-
-    list
-}
-
-fn find_low_points(heightmap: &Vec<Vec<u8>>) -> Vec<u64> {
+fn find_low_points(grid: &Array2<u8>) -> Vec<u64> {
     let mut lows = Vec::new();
-    for (y, row) in heightmap.iter().enumerate() {
+    for (y, row) in grid.rows().into_iter().enumerate() {
         for (x, col) in row.iter().enumerate() {
-            let neighbors = get_neighbors(heightmap, &(y, x));
+            let neighbors = get_neighbors4(grid, &(y, x));
             let mut higher_found = false;
             for (ny, nx) in &neighbors {
-                if *col >= heightmap[*ny][*nx] {
+                if *col >= grid[(*ny, *nx)] {
                     higher_found = true;
                     break;
                 }
@@ -162,18 +140,16 @@ fn find_low_points(heightmap: &Vec<Vec<u8>>) -> Vec<u64> {
     lows
 }
 
-fn explore_basin(heightmap: &Vec<Vec<u8>>, start: (usize, usize)) -> u64 {
-    let mut already_visited = Vec::new();
-    already_visited.push(start);
-
-    let mut to_explore = get_neighbors(heightmap, &start);
+fn explore_basin(grid: &Array2<u8>, start: (usize, usize)) -> u64 {
+    let mut already_visited = vec![start];
+    let mut to_explore = get_neighbors4(grid, &start);
     let mut to_add: Vec<(usize, usize)> = Vec::new();
 
-    while to_explore.len() > 0 {
+    while !to_explore.is_empty() {
         for (y, x) in &to_explore {
             let pos = (*y, *x);
-            if heightmap[*y][*x] != 9 && !already_visited.contains(&pos) && !to_add.contains(&pos) {
-                to_add.append(&mut get_neighbors(heightmap, &pos));
+            if grid[(*y, *x)] != 9 && !already_visited.contains(&pos) && !to_add.contains(&pos) {
+                to_add.append(&mut get_neighbors4(grid, &pos));
                 already_visited.push(pos);
             }
         }
@@ -184,14 +160,14 @@ fn explore_basin(heightmap: &Vec<Vec<u8>>, start: (usize, usize)) -> u64 {
     already_visited.len() as u64
 }
 
-fn find_basins(heightmap: &Vec<Vec<u8>>) -> Vec<u64> {
+fn find_basins(grid: &Array2<u8>) -> Vec<u64> {
     let mut basins = Vec::new();
-    for (y, row) in heightmap.iter().enumerate() {
+    for (y, row) in grid.rows().into_iter().enumerate() {
         for (x, col) in row.iter().enumerate() {
-            let neighbors = get_neighbors(heightmap, &(y, x));
+            let neighbors = get_neighbors4(grid, &(y, x));
             let mut higher_found = false;
             for (ny, nx) in &neighbors {
-                if *col >= heightmap[*ny][*nx] {
+                if *col >= grid[(*ny, *nx)] {
                     higher_found = true;
                     break;
                 }
@@ -199,7 +175,7 @@ fn find_basins(heightmap: &Vec<Vec<u8>>) -> Vec<u64> {
             if higher_found {
                 continue;
             }
-            basins.push(explore_basin(heightmap, (y, x)));
+            basins.push(explore_basin(grid, (y, x)));
         }
     }
     basins

@@ -178,10 +178,10 @@ fn parse_input(input: &str) -> Vec<(Vec<String>, Vec<String>)> {
     input
         .lines()
         .map(|line| {
-            let parts: Vec<&str> = line.split(" | ").map(|s| s).collect();
+            let parts: Vec<&str> = line.split(" | ").collect();
             (
-                parts[0].split(' ').map(|s| sort(s)).collect(),
-                parts[1].split(' ').map(|s| sort(s)).collect(),
+                parts[0].split(' ').map(sort).collect(),
+                parts[1].split(' ').map(sort).collect(),
             )
         })
         .collect()
@@ -189,7 +189,7 @@ fn parse_input(input: &str) -> Vec<(Vec<String>, Vec<String>)> {
 
 /// Part 1: In the output values, how many times do digits `1`, `4`, `7`, or `8` appear?
 #[aoc(day8, part1)]
-fn part1(input: &Vec<(Vec<String>, Vec<String>)>) -> usize {
+fn part1(input: &[(Vec<String>, Vec<String>)]) -> usize {
     let mut cnt = 0;
     // 1: 2 segments
     // 7: 3 segments
@@ -208,7 +208,7 @@ fn part1(input: &Vec<(Vec<String>, Vec<String>)>) -> usize {
 
 /// Part 2: What do you get if you add up all of the output values?
 #[aoc(day8, part2)]
-fn part2(input: &Vec<(Vec<String>, Vec<String>)>) -> u64 {
+fn part2(input: &[(Vec<String>, Vec<String>)]) -> u64 {
     input
         .iter()
         .map(|(unique_signal_patterns, value)| decode(unique_signal_patterns, value))
@@ -231,7 +231,7 @@ fn string_contains_chars(haystack: &str, needles: &str) -> bool {
     true
 }
 
-fn build_map(unique_signal_patterns: &Vec<String>) -> HashMap<String, u64> {
+fn build_map(unique_signal_patterns: &[String]) -> HashMap<String, u64> {
     let mut output = HashMap::new();
 
     let signal1 = unique_signal_patterns
@@ -304,8 +304,8 @@ fn build_map(unique_signal_patterns: &Vec<String>) -> HashMap<String, u64> {
     output
 }
 
-fn decode(unique_signal_patterns: &Vec<String>, value: &Vec<String>) -> u64 {
-    let map = build_map(&unique_signal_patterns);
+fn decode(unique_signal_patterns: &[String], value: &[String]) -> u64 {
+    let map = build_map(unique_signal_patterns);
     let mut output = String::new();
     for digit in value {
         output += &*map.get(digit).unwrap().to_string();

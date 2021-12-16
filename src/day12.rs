@@ -196,7 +196,7 @@ fn parse_input(input: &str) -> Graph<CaveNode, ()> {
     let mut graph = Graph::new();
     let mut node_by_name: HashMap<String, NodeIndex> = HashMap::new();
     for line in input.lines() {
-        let parts: Vec<&str> = line.split('-').map(|p| p).collect();
+        let parts: Vec<&str> = line.split('-').collect();
         let from_name = parts[0];
         let to_name = parts[1];
         if !node_by_name.contains_key(from_name) {
@@ -240,7 +240,7 @@ impl CaveNode {
         match name {
             "start" => CaveNode::Start,
             "end" => CaveNode::End,
-            name => match name.chars().nth(0).unwrap().is_lowercase() {
+            name => match name.chars().next().unwrap().is_lowercase() {
                 true => CaveNode::SmallCave(name.to_string()),
                 false => CaveNode::BigCave(name.to_string()),
             },
@@ -259,9 +259,7 @@ fn decend(
     let last_idx = path[path.len() - 1];
     let last_node = graph.node_weight(last_idx).unwrap();
     if let CaveNode::SmallCave(_) = last_node {
-        if !small_caves.contains_key(&last_idx) {
-            small_caves.insert(last_idx, 0);
-        }
+        small_caves.entry(last_idx).or_insert(0);
         *small_caves.get_mut(&last_idx).unwrap() += 1;
     }
     for edge in graph.edges(last_idx) {
@@ -283,7 +281,7 @@ fn decend(
                     } else if max_small_caves > 1 {
                         let mut found_bad = false;
                         for key in small_caves.keys() {
-                            if *key != target_idx && small_caves[&key] >= max_small_caves {
+                            if *key != target_idx && small_caves[key] >= max_small_caves {
                                 found_bad = true;
                             }
                         }
@@ -321,26 +319,23 @@ fn build_paths(graph: &Graph<CaveNode, ()>, max_small_caves: u8) -> Vec<Vec<Node
     let history = Arc::new(RefCell::new(Vec::new()));
 
     for node_idx in graph.node_indices() {
-        match graph.node_weight(node_idx).unwrap() {
-            CaveNode::Start => {
-                for edge in graph.edges(node_idx) {
-                    let target_idx = edge.target();
-                    let small_caves = HashMap::new();
-                    paths.append(&mut decend(
-                        &graph,
-                        history.clone(),
-                        small_caves,
-                        max_small_caves,
-                        vec![node_idx, target_idx],
-                    ));
-                }
-
-                // let mut dfs = Dfs::new(&graph, node_idx);
-                // while let Some(nx) = dfs.next(&graph) {}
-
-                break;
+        if let CaveNode::Start = graph.node_weight(node_idx).unwrap() {
+            for edge in graph.edges(node_idx) {
+                let target_idx = edge.target();
+                let small_caves = HashMap::new();
+                paths.append(&mut decend(
+                    graph,
+                    history.clone(),
+                    small_caves,
+                    max_small_caves,
+                    vec![node_idx, target_idx],
+                ));
             }
-            _ => {}
+
+            // let mut dfs = Dfs::new(&graph, node_idx);
+            // while let Some(nx) = dfs.next(&graph) {}
+
+            break;
         }
     }
     paths

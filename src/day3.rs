@@ -137,7 +137,7 @@ fn parse_input(input: &str) -> Vec<u32> {
 /// then multiply them together.
 /// What is the power consumption of the submarine?
 #[aoc(day3, part1)]
-fn part1(input: &Vec<u32>) -> u64 {
+fn part1(input: &[u32]) -> u64 {
     gamma(input) as u64 * epsilon(input) as u64
 }
 
@@ -146,18 +146,18 @@ fn part1(input: &Vec<u32>) -> u64 {
 /// Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and
 /// CO2 scrubber rating, then multiply them together.
 #[aoc(day3, part2)]
-fn part2(input: &Vec<u32>) -> u64 {
+fn part2(input: &[u32]) -> u64 {
     oxygen(input) as u64 * co2(input) as u64
 }
 
 ///  To find oxygen generator rating, determine the most common value (`0` or `1`) in the
 ///  current bit position, and keep only numbers with that bit in that position. If `0` and `1`
 ///  are equally common, keep values with a `1` in the position being considered.
-fn oxygen(input: &Vec<u32>) -> u32 {
+fn oxygen(input: &[u32]) -> u32 {
     let max = *input.iter().max().unwrap();
     let start = significant_bitcount(max).unwrap();
 
-    let mut remaining = input.clone();
+    let mut remaining = Vec::from(input);
     for i in start..32 {
         let (count_zeros, count_ones) = count_ones_zeros_at(&remaining, i);
         if count_ones >= count_zeros {
@@ -181,11 +181,11 @@ fn oxygen(input: &Vec<u32>) -> u32 {
 /// To find CO2 scrubber rating, determine the least common value (`0` or `1`) in the current
 /// bit position, and keep only numbers with that bit in that position. If `0` and `1` are equally
 /// common, keep values with a `0` in the position being considered.
-fn co2(input: &Vec<u32>) -> u32 {
+fn co2(input: &[u32]) -> u32 {
     let max = *input.iter().max().unwrap();
     let start = significant_bitcount(max).unwrap();
 
-    let mut remaining = input.clone();
+    let mut remaining = Vec::from(input);
     for i in start..32 {
         let (count_zeros, count_ones) = count_ones_zeros_at(&remaining, i);
         if count_zeros <= count_ones {
@@ -206,7 +206,7 @@ fn co2(input: &Vec<u32>) -> u32 {
     0
 }
 
-fn count_ones_zeros_at(input: &Vec<u32>, pos: u32) -> (u32, u32) {
+fn count_ones_zeros_at(input: &[u32], pos: u32) -> (u32, u32) {
     let mut count_zeros = 0;
     let mut count_ones = 0;
     for v in input {
@@ -220,7 +220,7 @@ fn count_ones_zeros_at(input: &Vec<u32>, pos: u32) -> (u32, u32) {
 }
 
 /// The gamma rate is calculated by using the least common bit from each position.
-fn gamma(input: &Vec<u32>) -> u32 {
+fn gamma(input: &[u32]) -> u32 {
     let mut ret = 0;
     for i in 0..32 {
         let (count_zeros, count_ones) = count_ones_zeros_at(input, i);
@@ -242,7 +242,7 @@ fn significant_bitcount(value: u32) -> Option<u32> {
 
 /// The epsilon rate is calculated in a similar way; rather than use the most common bit,
 /// the least common bit from each position is used.
-fn epsilon(input: &Vec<u32>) -> u32 {
+fn epsilon(input: &[u32]) -> u32 {
     let gamma = gamma(input);
     let max = *input.iter().max().unwrap();
     let start = significant_bitcount(max).unwrap();

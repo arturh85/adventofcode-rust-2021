@@ -190,30 +190,20 @@
 //!
 //! **Using the full map, what is the lowest total risk of any path from the top left to the bottom right?**
 
+use crate::util::{array2_to_graph4, parse_array2, shape2};
 use ndarray::Array2;
 use petgraph::graph::NodeIndex;
-use petgraph::Graph;
 
 #[aoc_generator(day15)]
 fn parse_input(input: &str) -> Array2<u64> {
-    let mut grid: Array2<u64> =
-        Array2::default((input.lines().count(), input.lines().nth(0).unwrap().len()));
-    for (y, line) in input.lines().enumerate() {
-        for (x, digit) in line.chars().enumerate() {
-            let val = digit.to_string().parse().unwrap();
-            grid[(y, x)] = val;
-        }
-    }
-    grid
+    parse_array2(input)
 }
 
 /// Part 1: What is the lowest total risk of any path from the top left to the bottom right?
 #[aoc(day15, part1)]
 fn part1(grid: &Array2<u64>) -> u64 {
     let (graph, node_grid) = array2_to_graph4(grid);
-    let shape = grid.shape();
-    let height = shape[0];
-    let width = shape[1];
+    let (height, width) = shape2(grid);
     let start: NodeIndex = node_grid[(0, 0)];
     let goal: NodeIndex = node_grid[(height - 1, width - 1)];
     let (cost, _) = petgraph::algo::astar(
@@ -231,9 +221,7 @@ fn part1(grid: &Array2<u64>) -> u64 {
 /// top left to the bottom right?
 #[aoc(day15, part2)]
 fn part2(grid: &Array2<u64>) -> u64 {
-    let shape = grid.shape();
-    let height = shape[0];
-    let width = shape[1];
+    let (height, width) = shape2(grid);
     let mut full_grid: Array2<u64> = Array2::zeros((height * 5, width * 5));
     for (y, rows) in grid.rows().into_iter().enumerate() {
         for (x, col) in rows.iter().enumerate() {
@@ -249,54 +237,6 @@ fn part2(grid: &Array2<u64>) -> u64 {
         }
     }
     part1(&full_grid)
-}
-
-/// Builds a graph of given Array with 4 neighbors
-pub fn array2_to_graph4<T>(grid: &Array2<T>) -> (Graph<T, T>, Array2<NodeIndex>)
-where
-    T: Clone,
-{
-    let mut graph: Graph<T, T> = Graph::new();
-    let shape = grid.shape();
-    let height = shape[0];
-    let width = shape[1];
-    let mut node_grid: Array2<NodeIndex> = Array2::default((height, width));
-    for (y, row) in grid.rows().into_iter().enumerate() {
-        for (x, col) in row.iter().enumerate() {
-            node_grid[(y, x)] = graph.add_node(col.clone());
-        }
-    }
-    for (y, row) in grid.rows().into_iter().enumerate() {
-        for (x, col) in row.iter().enumerate() {
-            for (ny, nx) in get_neighbors4(grid, &(y, x)) {
-                let from_node = node_grid[(y, x)];
-                let to_node = node_grid[(ny, nx)];
-                graph.add_edge(from_node, to_node, grid[(ny, nx)].clone());
-                graph.add_edge(to_node, from_node, col.clone());
-            }
-        }
-    }
-    (graph, node_grid)
-}
-
-fn get_neighbors4<T>(grid: &Array2<T>, pos: &(usize, usize)) -> Vec<(usize, usize)> {
-    let shape = grid.shape();
-    let height = shape[0];
-    let width = shape[1];
-    let mut list = Vec::new();
-    if pos.0 > 0 {
-        list.push((pos.0 - 1, pos.1));
-    }
-    if pos.1 > 0 {
-        list.push((pos.0, pos.1 - 1));
-    }
-    if pos.0 < height - 1 {
-        list.push((pos.0 + 1, pos.1));
-    }
-    if pos.1 < width - 1 {
-        list.push((pos.0, pos.1 + 1));
-    }
-    list
 }
 
 #[cfg(test)]

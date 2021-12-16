@@ -82,13 +82,13 @@ fn parse_input(input: &str) -> Vec<Instr> {
     input
         .lines()
         .map(|line| {
-            let parts: Vec<&str> = line.split(" ").collect();
+            let parts: Vec<&str> = line.split(' ').collect();
             match parts[0] {
                 "forward" => Instr::Forward(parts[1].parse().unwrap()),
                 "up" => Instr::Up(parts[1].parse().unwrap()),
                 "down" => Instr::Down(parts[1].parse().unwrap()),
                 _ => {
-                    panic!("wtf")
+                    panic!("invalid format")
                 }
             }
         })
@@ -99,9 +99,9 @@ fn parse_input(input: &str) -> Vec<Instr> {
 /// Calculate the horizontal position and depth you would have after following the planned course.
 /// What do you get if you multiply your final horizontal position by your final depth?
 #[aoc(day2, part1)]
-fn part1(input: &Vec<Instr>) -> i64 {
-    let pos = execute1(input);
-    pos.0 * pos.1
+fn part1(input: &[Instr]) -> i64 {
+    let (x, y) = execute1(input);
+    x * y
 }
 
 /// Part 2:
@@ -109,12 +109,12 @@ fn part1(input: &Vec<Instr>) -> i64 {
 /// you would have after following the planned course.
 /// What do you get if you multiply your final horizontal position by your final depth?
 #[aoc(day2, part2)]
-fn part2(input: &Vec<Instr>) -> i64 {
-    let pos = execute2(input);
-    pos.0 * pos.1
+fn part2(input: &[Instr]) -> i64 {
+    let (x, y) = execute2(input);
+    x * y
 }
 
-fn execute1(instructions: &Vec<Instr>) -> (i64, i64) {
+fn execute1(instructions: &[Instr]) -> (i64, i64) {
     let mut pos = (0, 0);
     for instr in instructions {
         match instr {
@@ -126,7 +126,7 @@ fn execute1(instructions: &Vec<Instr>) -> (i64, i64) {
     pos
 }
 
-fn execute2(instructions: &Vec<Instr>) -> (i64, i64) {
+fn execute2(instructions: &[Instr]) -> (i64, i64) {
     let mut pos = (0, 0);
     let mut aim = 0;
     for instr in instructions {

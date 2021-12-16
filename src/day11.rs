@@ -371,18 +371,12 @@
 //!
 //! **What is the first step during which all octopuses flash?**
 
+use crate::util::{get_neighbors8, parse_array2};
 use ndarray::Array2;
 
 #[aoc_generator(day11)]
 fn parse_input(input: &str) -> Array2<u8> {
-    let mut grid: Array2<u8> =
-        Array2::default((input.lines().count(), input.lines().nth(0).unwrap().len()));
-    for (y, line) in input.lines().enumerate() {
-        for (x, digit) in line.chars().enumerate() {
-            grid[(y, x)] = digit.to_string().parse().unwrap();
-        }
-    }
-    grid
+    parse_array2(input)
 }
 
 /// Part 1: Given the starting energy levels of the dumbo octopuses in your cavern,
@@ -442,9 +436,9 @@ fn evolve(energy_map: &Array2<u8>, steps: usize) -> (usize, Array2<u8>) {
             }
         }
         let mut todo_flashes = step_flashes.clone();
-        while todo_flashes.len() > 0 {
+        while !todo_flashes.is_empty() {
             let flash = todo_flashes.pop().unwrap();
-            for (y, x) in get_neighbors(&state, &flash) {
+            for (y, x) in get_neighbors8(&state, &flash) {
                 if step_flashes.contains(&(y, x)) {
                     continue;
                 }
@@ -465,36 +459,6 @@ fn evolve(energy_map: &Array2<u8>, steps: usize) -> (usize, Array2<u8>) {
         flashes += step_flashes.len();
     }
     (flashes, state)
-}
-
-fn get_neighbors(energy_map: &Array2<u8>, pos: &(usize, usize)) -> Vec<(usize, usize)> {
-    let shape = energy_map.shape();
-    let mut list = Vec::new();
-    if pos.0 > 0 {
-        list.push((pos.0 - 1, pos.1));
-    }
-    if pos.1 > 0 {
-        list.push((pos.0, pos.1 - 1));
-    }
-    if pos.0 < shape[0] - 1 {
-        list.push((pos.0 + 1, pos.1));
-    }
-    if pos.1 < shape[1] - 1 {
-        list.push((pos.0, pos.1 + 1));
-    }
-    if pos.0 > 0 && pos.1 > 0 {
-        list.push((pos.0 - 1, pos.1 - 1));
-    }
-    if pos.0 > 0 && pos.1 < shape[1] - 1 {
-        list.push((pos.0 - 1, pos.1 + 1));
-    }
-    if pos.0 < shape[0] - 1 && pos.1 > 0 {
-        list.push((pos.0 + 1, pos.1 - 1));
-    }
-    if pos.0 < shape[0] - 1 && pos.1 < shape[1] - 1 {
-        list.push((pos.0 + 1, pos.1 + 1));
-    }
-    list
 }
 
 #[cfg(test)]

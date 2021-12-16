@@ -168,7 +168,7 @@ fn parse_input(input: &str) -> Input {
                 _ => panic!("should not happen"),
             }
         } else if !line.is_empty() {
-            let parts: Vec<usize> = line.split(",").map(|c| c.parse().unwrap()).collect();
+            let parts: Vec<usize> = line.split(',').map(|c| c.parse().unwrap()).collect();
             let x = parts[0];
             let y = parts[1];
             dots.push((x, y));
@@ -193,9 +193,8 @@ fn parse_input(input: &str) -> Input {
 #[aoc(day13, part1)]
 fn part1(input: &Input) -> usize {
     let mut grid = input.grid.clone();
-    for fold in &input.folds {
+    if let Some(fold) = input.folds.get(0) {
         grid = execute_fold(&grid, fold);
-        break;
     }
     grid.map(|f| if *f { 1 } else { 0 }).sum()
 }
@@ -276,6 +275,7 @@ fn grid_str(grid: &Array2<bool>) -> String {
     }
     output.trim().to_string()
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -123,7 +123,7 @@ fn parse_input(input: &str) -> Vec<i64> {
 /// Part 1: How many measurements are larger than the previous measurement?
 #[aoc(day1, part1)]
 fn part1(input: &[i64]) -> usize {
-    count_increases(&input)
+    count_increases(input)
 }
 
 /// Part 2: How many sums are larger than the previous sum?

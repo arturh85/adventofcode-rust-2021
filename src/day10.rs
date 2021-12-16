@@ -139,7 +139,7 @@
 /// What is the total syntax error score for those errors?
 #[aoc(day10, part1)]
 fn part1(input: &str) -> usize {
-    input.lines().map(|line| syntax_error_score(line)).sum()
+    input.lines().map(syntax_error_score).sum()
 }
 
 /// Part 2:
@@ -149,10 +149,10 @@ fn part1(input: &str) -> usize {
 fn part2(input: &str) -> usize {
     let mut scores: Vec<usize> = input
         .lines()
-        .map(|line| incomplete_score(line))
+        .map(incomplete_score)
         .filter(|score| *score > 0)
         .collect();
-    scores.sort();
+    scores.sort_unstable();
     scores[scores.len() / 2]
 }
 
@@ -237,7 +237,7 @@ fn check_line(line: &str) -> Result<LineStatus, (char, char)> {
             }
         }
     }
-    if stack.len() == 0 {
+    if stack.is_empty() {
         Ok(LineStatus::Complete)
     } else {
         Ok(LineStatus::Incomplete(stack))

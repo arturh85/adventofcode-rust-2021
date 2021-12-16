@@ -105,9 +105,9 @@ fn parse_input(input: &str) -> Polymer {
             _ => {
                 let parts: Vec<String> = line.split(" -> ").map(|c| c.to_string()).collect();
                 rules.push((
-                    parts[0].chars().nth(0).unwrap(),
+                    parts[0].chars().next().unwrap(),
                     parts[0].chars().nth(1).unwrap(),
-                    parts[1].chars().nth(0).unwrap(),
+                    parts[1].chars().next().unwrap(),
                 ));
             }
         }
@@ -138,16 +138,14 @@ fn part2(input: &Polymer) -> usize {
 fn map_char_frequences(input: &str) -> HashMap<char, usize> {
     let mut map = HashMap::new();
     for char in input.chars() {
-        if !map.contains_key(&char) {
-            map.insert(char, 0);
-        }
+        map.entry(char).or_insert(0);
         *map.get_mut(&char).unwrap() += 1;
     }
     map
 }
 
 fn evolve1(input: &Polymer, steps: usize) -> String {
-    let mut state: Vec<char> = input.start.chars().map(|c| c).collect();
+    let mut state: Vec<char> = input.start.chars().collect();
     for _step in 0..steps {
         let mut next_state = state.clone();
         let mut idx = 1;
@@ -172,38 +170,33 @@ fn evolve1(input: &Polymer, steps: usize) -> String {
 
 fn evolve2(input: &Polymer, steps: usize) -> HashMap<char, usize> {
     let mut frequencies = map_char_frequences(&input.start);
-    let chars: Vec<char> = input.start.chars().map(|c| c).collect();
+    let chars: Vec<char> = input.start.chars().collect();
     let windows: Vec<(char, char)> = chars.windows(2).map(|w| (w[0], w[1])).collect();
     let mut window_map: HashMap<(char, char), usize> = HashMap::new();
     for w in windows {
-        if !window_map.contains_key(&w) {
-            window_map.insert(w, 0);
-        }
+        window_map.entry(w).or_insert(0);
         *window_map.get_mut(&w).unwrap() += 1;
     }
     for _ in 0..steps {
         let mut next_state = window_map.clone();
 
-        for rule in &input.rules {
+        for (a, b, c) in &input.rules {
             // AB -> C
-            let ab = (rule.0, rule.1);
-            let ac = (rule.0, rule.2);
-            let cb = (rule.2, rule.1);
+            let ab = (*a, *b);
+            let ac = (*a, *c);
+            let cb = (*c, *b);
             if window_map.contains_key(&ab) && window_map[&ab] > 0 {
                 let cnt = window_map[&ab];
-                if !frequencies.contains_key(&rule.2) {
-                    frequencies.insert(rule.2, 0);
-                }
-                *frequencies.get_mut(&rule.2).unwrap() += cnt;
                 *next_state.get_mut(&ab).unwrap() -= cnt;
-                if !next_state.contains_key(&ac) {
-                    next_state.insert(ac, 0);
-                }
+
+                next_state.entry(ac).or_insert(0);
                 *next_state.get_mut(&ac).unwrap() += cnt;
-                if !next_state.contains_key(&cb) {
-                    next_state.insert(cb, 0);
-                }
+
+                next_state.entry(cb).or_insert(0);
                 *next_state.get_mut(&cb).unwrap() += cnt;
+
+                frequencies.entry(*c).or_insert(0);
+                *frequencies.get_mut(c).unwrap() += cnt;
             }
         }
         window_map = next_state;
